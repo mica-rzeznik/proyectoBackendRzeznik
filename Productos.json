@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Grageas Bertie Bott de todos los sabores",
+    "description": "Grageas, literalmente, de todos los sabores: coco, berenjena, frutilla, jabón, etc.",
+    "price": 6,
+    "thumbnail": "https://i.imgur.com/LBaABFR.png",
+    "code": "gbbts",
+    "stock": 15,
+    "id": 1
+  },
+  {
+    "title": "Ranas de chocolate",
+    "description": "Incluye una tarjeta coleccionable de alguna bruja o algún mago famoso. Cuidado que la rana salta.",
+    "price": 6,
+    "thumbnail": "https://i.imgur.com/pK1pjfK.jpeg",
+    "code": "rc",
+    "stock": 23,
+    "id": 2
+  },
+  {
+    "title": "Empanadas de calabaza",
+    "description": "Las favoritas de todos los magos y brujas.",
+    "price": 5,
+    "thumbnail": "https://i.imgur.com/jSgmXpN.jpeg",
+    "code": "ec",
+    "stock": 12,
+    "id": 3
+  },
+  {
+    "title": "Chicle superhinchable",
+    "description": "Burbujas de colores que no explotan por días. Sabor frutos locos sin azúcar.",
+    "price": 2,
+    "thumbnail": "https://i.imgur.com/RslMNN0.png",
+    "code": "cs",
+    "stock": 12,
+    "id": 4
+  },
+  {
+    "title": "Paleta ácida",
+    "description": "Advertencia: son capaces de hacer un agujero en la lengua.",
+    "price": 3,
+    "thumbnail": "https://i.imgur.com/ZcSj6NS.png",
+    "code": "pa",
+    "stock": 31,
+    "id": 5
+  },
+  {
+    "title": "Cucuruchos de cucarachas",
+    "description": "Hechos con 100% cucarachas de la mejor calidad.",
+    "price": 2,
+    "thumbnail": "https://i.imgur.com/vGYXmLv.png",
+    "code": "cc",
+    "stock": 14,
+    "id": 6
+  },
+  {
+    "title": "Paletas con sabor a sangre",
+    "description": "La favorita de los vampiros.",
+    "price": 3,
+    "thumbnail": "https://i.imgur.com/6sqYSSA.jpeg",
+    "code": "pss",
+    "stock": 17,
+    "id": 7
+  },
+  {
+    "title": "Plumas de azúcar",
+    "description": "Delicadas golosinas hechas de azúcar esculpido para asemejarse a plumas de verdad.",
+    "price": 1,
+    "thumbnail": "https://i.imgur.com/kN7MJxC.jpeg",
+    "code": "paz",
+    "stock": 55,
+    "id": 8
+  },
+  {
+    "title": "Chocolate Honeydukes",
+    "description": "Antídoto poderoso y excelente para el efecto de enfriamiento producido al contacto con los dementores.",
+    "price": 3,
+    "thumbnail": "https://i.imgur.com/wtfMRkk.png",
+    "code": "ch",
+    "stock": 27,
+    "id": 9
+  },
+  {
+    "title": "Bombones explosivos",
+    "description": "Con dinamita sabor coco y chocolate.",
+    "price": 3,
+    "thumbnail": "https://i.imgur.com/3j0QlDV.png",
+    "code": "be",
+    "stock": 8,
+    "id": 10
+  }
+]
