@@ -60,37 +60,26 @@ router.post('/:cid/products/:pid', async (req, res) => {
     return res.send({ status: "Success", message: "Producto agregado al carrito.", data: carrito })
 })
 
-// router.put('/:cID', async (req, res) => {
-//     let cartId = parseInt(req.params.cID)
-//     let cartUpdated = req.body
-//     const cartPosition = carts.findIndex((p => p.id === cartId))
-//     if (cartPosition < 0) {
-//         return res.status(202).send({ status: "info", error: "Carrito no encontrado" })
-//     }
-//     let cartActual = carts[cartPosition]
-//     for (const [key, value] of Object.entries(cartUpdated)) {
-//         if (cartActual.hasOwnProperty(key)) {
-//             cartActual[key] = value
-//         }
-//     }
-//     await fs.promises.writeFile("./Carritos.json", JSON.stringify(carts, null, 2))
-//     return res.send({ status: "Success", message: "Carrito actualizado.", data: cartActual })
-// })
-
-
-// router.delete('/:cID', async (req, res) => {
-//     let cartId = parseInt(req.params.pID)
-//     const cartsSize = carts.length
-//     const cartPosition = carts.findIndex((p => p.id === cartId))
-//     if (cartPosition < 0) {
-//         return res.status(202).send({ status: "info", error: "Carrito no encontrado" })
-//     }
-//     carts.splice(cartPosition, 1)
-//     if (carts.length === cartsSize) {
-//         return res.status(500).send({ status: "error", error: "El carrito no se pudo borrar." })
-//     }
-//     await fs.promises.writeFile("./Carritos.json", JSON.stringify(carts, null, 2))
-//     return res.send({ status: "Success", message: "Carrito eliminado." })
-// })
+router.delete('/:cid/products/:pid', async (req, res) => {
+    const cartId = parseInt(req.params.cid)
+    const productId = parseInt(req.params.pid)
+    const cartPosition = carts.findIndex((c => c.id === cartId))
+    if (cartPosition < 0) {
+        return res.status(404).send({ status: "info", error: "Carrito no encontrado" })
+    }
+    const carrito = carts[cartPosition]
+    const productBorrarIndex = carrito.products.findIndex((p => p.product === productId))
+    if(productBorrarIndex < 0){
+        return res.status(404).send({ status: "info", error: "Producto no encontrado" })
+    }else{
+        const productBorrar = carrito.products[productBorrarIndex]
+        productBorrar.quantity -= 1
+        if(productBorrar.quantity == 0){
+            carrito.products.splice(productBorrarIndex, 1)
+        }
+    }
+    await fs.promises.writeFile("./Carritos.json", JSON.stringify(carts, null, 2))
+    return res.send({ status: "Success", message: "Producto borrado del carrito.", data: carrito })
+})
 
 export default router

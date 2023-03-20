@@ -7,6 +7,7 @@
     "thumbnail": "https://i.imgur.com/LBaABFR.png",
     "code": "gbbts",
     "stock": 15,
+    "category": "golosinas",
     "id": 1
   },
   {
@@ -17,6 +18,7 @@
     "thumbnail": "https://i.imgur.com/pK1pjfK.jpeg",
     "code": "rc",
     "stock": 23,
+    "category": "chocolate",
     "id": 2
   },
   {
@@ -27,6 +29,7 @@
     "thumbnail": "https://i.imgur.com/jSgmXpN.jpeg",
     "code": "ec",
     "stock": 12,
+    "category": "pastelería",
     "id": 3
   },
   {
@@ -37,6 +40,7 @@
     "thumbnail": "https://i.imgur.com/RslMNN0.png",
     "code": "cs",
     "stock": 12,
+    "category": "golosinas",
     "id": 4
   },
   {
@@ -47,6 +51,7 @@
     "thumbnail": "https://i.imgur.com/ZcSj6NS.png",
     "code": "pa",
     "stock": 31,
+    "category": "golosinas",
     "id": 5
   },
   {
@@ -57,6 +62,7 @@
     "thumbnail": "https://i.imgur.com/vGYXmLv.png",
     "code": "cc",
     "stock": 14,
+    "category": "golosinas",
     "id": 6
   },
   {
@@ -67,6 +73,7 @@
     "thumbnail": "https://i.imgur.com/6sqYSSA.jpeg",
     "code": "pss",
     "stock": 17,
+    "category": "golosinas",
     "id": 7
   },
   {
@@ -77,6 +84,7 @@
     "thumbnail": "https://i.imgur.com/kN7MJxC.jpeg",
     "code": "paz",
     "stock": 55,
+    "category": "azucarados",
     "id": 8
   },
   {
@@ -87,6 +95,7 @@
     "thumbnail": "https://i.imgur.com/wtfMRkk.png",
     "code": "ch",
     "stock": 27,
+    "category": "chocolate",
     "id": 9
   },
   {
@@ -97,6 +106,7 @@
     "thumbnail": "https://i.imgur.com/3j0QlDV.png",
     "code": "be",
     "stock": 8,
+    "category": "chocolate",
     "id": 10
   }
 ]

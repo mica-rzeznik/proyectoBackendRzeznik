@@ -4,11 +4,13 @@ import fs from 'fs'
 import products from '../../Productos.json' assert { type: "json" }
 
 router.get('/', async (req, res) => {
-    res.send(products)
+    const limit = req.query.limit || products.length
+    const productosLimite = products.slice(0, limit)
+    res.send(productosLimite)
 })
 
-router.get('/:pID', async (req, res) => {
-    let productId = parseInt(req.params.pID)
+router.get('/:pid', async (req, res) => {
+    let productId = parseInt(req.params.pid)
     const filtroID = JSON.parse(await fs.promises.readFile('./Productos.json')).find((p) => p.id == productId)
     if(!filtroID){
         res.status(400).send({ status: "Error", message: "No existe ese id"})
