@@ -1,8 +1,8 @@
 import Router from 'express'
 const router = Router()
 import fs from 'fs'
-import carts from '../../Carritos.json' assert { type: "json" }
-import products from '../../Productos.json' assert { type: "json" }
+import carts from '../Carritos.json' assert { type: "json" }
+import products from '../Productos.json' assert { type: "json" }
 
 router.get('/', async (req, res) => {
     res.send(carts)
