@@ -1,4 +1,4 @@
-const socket = io()
+let socket = io()
 
 const cardProductos = document.getElementById("prod")
 
@@ -25,4 +25,3 @@ socket.on('new-product', (data) => {
     })
     cardProductos.innerHTML=x
 })
-

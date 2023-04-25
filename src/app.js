@@ -5,7 +5,8 @@ import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import path from 'path'
-import products from '../src/Productos.json' assert { type: "json" }
+import products from '../src/files/Productos.json' assert { type: "json" }
+import mongoose from 'mongoose'
 
 const app = express()
 const PORT = 8080
@@ -41,3 +42,15 @@ socketServer.on('connection', socket =>{
     console.log("Nuevo cliente conectado")
     socket.emit('new-product', {products})
 })
+
+const DB = 'mongodb+srv://admin:admin@cluster0.28dpnsm.mongodb.net/ecommerce?retryWrites=true&w=majority'
+const connectMongoDB = async ()=>{
+    try {
+        await mongoose.connect(DB)
+        console.log("Conectado con exito a MongoDB usando Moongose.")
+    } catch (error) {
+        console.error("No se pudo conectar a la BD usando Moongose: " + error)
+        process.exit()
+    }
+}
+connectMongoDB()

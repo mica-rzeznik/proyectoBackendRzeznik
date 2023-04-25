@@ -1,0 +1,21 @@
+<div class="row row-cols-1 row-cols-md-3 g-4 gap-3">
+    {{#each cart}}
+    <div class="card m-4" style="width: 18rem;">
+        <div class="card-header fs-7">
+            <p style="margin-bottom: 0px">Id del carrito: {{this._id}}</p>
+        </div>
+        {{#each products}}
+            <ol class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                <div class="fw-bold">{{this.product.title}}</div>
+                ${{this.product.price}} sickles de plata
+                </div>
+                <span class="badge bg-primary rounded-pill">{{this.quantity}}</span>
+            </li>
+            </ol>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>
+<script src="../public/js/index.js"></script>

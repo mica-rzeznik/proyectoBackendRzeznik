@@ -1,21 +1,28 @@
 import Router from 'express'
 const router = Router()
-import fs from 'fs'
-import products from '../Productos.json' assert { type: "json" }
 import path from 'path'
 import __dirname from '../utils.js'
 import ioClient from 'socket.io-client'
+import ProductManager from '../dao/filesystem/ProductManager.js'
+import ProductService from '../dao/db/products.service.js'
 
-const file = 'src/Productos.json'
 const socket = ioClient('http://localhost:8080')
+let producto = new ProductManager()
+let productService = new ProductService()
 
 router.get('/', async (req, res) => {
-    const limit = req.query.limit || products.length
-    const productosLimite = products.slice(0, limit)
-    res.render(path.join(__dirname, 'views', 'home'), {
-        products: productosLimite
-    })
-    // res.send(productosLimite)
+    try{
+        // const productos = await producto.getProducts()
+        const productos = await productService.getAll()
+        const limit = req.query.limit || productos.length
+        const productosLimite = productos.slice(0, limit)
+        // res.send(productosLimite)
+        res.render(path.join(__dirname, 'views', 'home'), {
+            products: productosLimite
+        })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message })
+    }
 })
 
 router.get('/realtimeproducts', async (req, res) => {
@@ -23,79 +30,48 @@ router.get('/realtimeproducts', async (req, res) => {
 })
 
 router.get('/:pid', async (req, res) => {
-    let productId = parseInt(req.params.pid)
-    const filtroID = JSON.parse(await fs.promises.readFile(file)).find((p) => p.id == productId)
-    if(!filtroID){
-        res.status(400).send({ status: "Error", message: "No existe ese id"})
-    }else{
-        res.send(filtroID)
+    try{
+        // const productoId = [await producto.getProductById(parseInt(req.params.pid))]
+        const productoId = [await productService.getId(req.params.pid)]
+        // res.send(productoId)
+        res.render(path.join(__dirname, 'views', 'home'), {
+            products: productoId
+        })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message })
     }
 })
 
 router.post('/', async (req, res) => {
     try{
-        let producto = req.body
-        if(!fs.existsSync(file)){
-            await fs.promises.writeFile(file,"[]")
-        }
-        for (const item of products) {
-            if(
-            producto.title === "" ||
-            producto.description === "" ||
-            producto.price === "" ||
-            producto.thumbnail === "" ||
-            producto.code === "" ||
-            producto.stock === ""
-            ){
-                return res.status(400).send({ status: "Error", message: "Por favor, complete todos los campos solicitados." })
-            }
-            else if (producto.code === item.code){
-                return res.status(400).send({ status: "Error", message: "Ese ítem ya existe"})
-            }
-        }
-        const allProducts = JSON.parse(await fs.promises.readFile(file, 'utf-8'))
-        const highestId = allProducts.reduce((acc, curr) => curr.id > acc ? curr.id : acc, 0)
-        producto.id = highestId + 1
-        // products.push(producto)
-        allProducts.push(producto)
-        await fs.promises.writeFile(file, JSON.stringify(allProducts, null, 2))
-        res.send({ status: "Success", message: `Producto agregado con éxito con ID: ${producto.id}` })
+        let product = req.body
+        const newProduct = await productService.save(product)
+        res.status(200).send( { status: "Success", message: `Producto agregado con éxito con ID: ${product.id}`, data: newProduct })
     }catch(error){
-        res.status(500).send({ status: "Error", message: "No se pudo agregar el producto" })
+        res.status(500).send({ status: "Error", message: error.message })
     }
 })
 
 router.put('/:pID', async (req, res) => {
-    let productId = parseInt(req.params.pID)
-    let productUpdated = req.body
-    const productPosition = products.findIndex((p => p.id === productId))
-    if (productPosition < 0) {
-        return res.status(202).send({ status: "info", error: "Producto no encontrado" })
+    try{
+        let productId = req.params.pID
+        let productUpdated = req.body
+        // const productoActualizado = await producto.updateProduct(productId, productUpdated)
+        const productoActualizado = await productService.update(productId, productUpdated)
+        res.send({ status: "Success", message: "Producto actualizado.", data: productoActualizado })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message })
     }
-    let productActual = products[productPosition]
-    for (const [key, value] of Object.entries(productUpdated)) {
-        if (productActual.hasOwnProperty(key)) {
-            productActual[key] = value
-        }
-    }
-    await fs.promises.writeFile(file, JSON.stringify(products, null, 2))
-    return res.send({ status: "Success", message: "Producto actualizado.", data: productActual })
 })
 
-
 router.delete('/:pID', async (req, res) => {
-    let productId = parseInt(req.params.pID)
-    const productsSize = products.length
-    const productPosition = products.findIndex((p => p.id === productId))
-    if (productPosition < 0) {
-        return res.status(202).send({ status: "info", error: "Producto no encontrado" })
+    try{
+        let productId = req.params.pID
+        await productService.delete(productId)
+        return res.status(200).send({ status: "Success", message: "Producto eliminado." })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message })
     }
-    products.splice(productPosition, 1)
-    if (products.length === productsSize) {
-        return res.status(500).send({ status: "error", error: "El producto no se pudo borrar." })
-    }
-    await fs.promises.writeFile(file, JSON.stringify(products, null, 2))
-    return res.send({ status: "Success", message: "Producto eliminado." })
 })
 
 export default router
