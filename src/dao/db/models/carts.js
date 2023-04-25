@@ -2,30 +2,6 @@ import mongoose, {SchemaTypes} from 'mongoose'
 
 const cartsCollection = 'carts'
 
-const stringTypeSchemaUniqueRequired = {
-    type: String,
-    unique: true,
-    required: true
-}
-
-const numberTypeSchemaUniqueRequired = {
-    type: Number,
-    unique: true,
-    required: true
-}
-
-const stringTypeSchemaNonUniqueRequired = {
-    type: String,
-    unique: false,
-    required: true
-}
-
-const numberTypeSchemaNonUniqueRequired = {
-    type: Number,
-    unique: false,
-    required: true
-}
-
 const cartSchema = new mongoose.Schema({
     products: {
         type: [

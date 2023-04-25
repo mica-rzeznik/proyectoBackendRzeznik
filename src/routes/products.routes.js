@@ -5,6 +5,7 @@ import __dirname from '../utils.js'
 import ioClient from 'socket.io-client'
 import ProductManager from '../dao/filesystem/ProductManager.js'
 import ProductService from '../dao/db/products.service.js'
+import { productModel } from '../dao/db/models/products.js'
 
 const socket = ioClient('http://localhost:8080')
 let producto = new ProductManager()
@@ -12,13 +13,27 @@ let productService = new ProductService()
 
 router.get('/', async (req, res) => {
     try{
-        // const productos = await producto.getProducts()
-        const productos = await productService.getAll()
-        const limit = req.query.limit || productos.length
-        const productosLimite = productos.slice(0, limit)
-        // res.send(productosLimite)
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 5
+        const query = req.query.query
+        const sort = req.query.sort
+        const result = await productService.getAll(page, limit, query, sort)
+        console.log(result)
+        const prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : ''
+        const nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : ''
+        const products = result.docs
         res.render(path.join(__dirname, 'views', 'home'), {
-            products: productosLimite
+            products: products,
+            page: result.page,
+            hasNextPage: result.hasNextPage,
+            nextPage: result.nextPage,
+            hasPrevPage: result.hasPrevPage,
+            prevPage: result.prevPage,
+            totalPages: result.totalPages,
+            prevLink: prevLink,
+            nextLink: nextLink,
+            isValid: result.isValid,
+            currentPage: page
         })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })

@@ -7,9 +7,17 @@ class ProductService {
         console.log("Working products with Database persistence in mongodb")
     }
 
-    getAll = async () => {
-        let products = await productModel.find()
-        return products.map(p => p.toObject())
+    getAll = async (page, limit, query, sort) => {
+        const options = {
+            page: page || 1,
+            limit: limit || 10,
+            query: query || {},
+            sort: sort || {},
+            lean: true,
+        }
+        const result = await productModel.paginate({}, options)
+        return result
+        // return result.map(p => p.toObject())
     }
     save = async (product) => {
         let result = await productModel.create(product)

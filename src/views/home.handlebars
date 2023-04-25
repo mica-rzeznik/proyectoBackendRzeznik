@@ -14,5 +14,16 @@
             </div>
         </div>
     {{/each}}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {{#if hasPrevPage}}
+                <li class="page-item"><a class="page-link" href={{prevLink}}>Previous</a></li>
+            {{/if}}
+            <li class="page-item"><a class="page-link" href="#">{{page}}</a></li>
+            {{#if hasNextPage}}
+                <li class="page-item"><a class="page-link" href={{nextLink}}>Next</a></li>
+            {{/if}} 
+        </ul>
+    </nav>
 </div>
 <script src="/src/public/js/index.js"></script>
