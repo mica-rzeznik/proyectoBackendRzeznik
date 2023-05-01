@@ -42,3 +42,25 @@ logout.addEventListener('click',e=>{
         console.error('Error al hacer logout', error)
     })
 })
+
+function agregarProducto(cartId, productId) {
+    fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'POST' })
+    .then((response) => {
+        if (response.ok) {
+            window.location.replace('/api/carts')
+        } else {
+            console.error('Error al agregar el producto')
+        }})
+    .catch(error => console.error(error))
+}
+
+function eliminarProducto(cartId, productId) {
+    fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'DELETE' })
+    .then((response) => {
+        if (response.ok) {
+            window.location.replace('/api/carts')
+        } else {
+            console.error('Error al eliminar el producto')
+        }})
+    .catch(error => console.error(error))
+}
