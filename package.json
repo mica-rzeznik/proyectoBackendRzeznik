@@ -23,6 +23,7 @@
     "nodemon": "^2.0.21",
     "path": "^0.12.7",
     "socket.io": "^4.6.1",
-    "socket.io-client": "^4.6.1"
+    "socket.io-client": "^4.6.1",
+    "sweetalert2": "^11.7.3"
   }
 }

@@ -5,6 +5,7 @@ import __dirname from '../utils.js'
 import ioClient from 'socket.io-client'
 import CartManager from '../dao/filesystem/CartManager.js'
 import CartService from '../dao/db/carts.service.js'
+import Swal from 'sweetalert2'
 
 let carrito = new CartManager()
 let cartService = new CartService()
@@ -48,8 +49,8 @@ router.post('/:cid/products/:pid', async (req, res) => {
         const cartId = req.params.cid
         const productId = req.params.pid
         // const agregarProducto = await carrito.addProductToCart(cartId, productId)
-        const agregarProducto = await cartService.saveProduct(cartId, productId)
-        res.status(200).send( { status: "Success", message: "Producto agregado al carrito..", data: agregarProducto })
+        await cartService.saveProduct(cartId, productId)
+        res.status(200).redirect('/api/products')
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })
     }
