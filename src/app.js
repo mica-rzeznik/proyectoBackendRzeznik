@@ -7,9 +7,14 @@ import { Server } from 'socket.io'
 import path from 'path'
 import products from '../src/files/Productos.json' assert { type: "json" }
 import mongoose from 'mongoose'
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
+import usersViewsRoutes from './routes/users.views.routes.js'
+import sessionsRoutes from './routes/sessions.routes.js'
 
 const app = express()
 const PORT = 8080
+const DB = 'mongodb+srv://admin:admin@cluster0.28dpnsm.mongodb.net/ecommerce?retryWrites=true&w=majority'
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -26,16 +31,28 @@ app.set('view engine', 'handlebars')
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-
 const httpServer = app.listen(PORT, ()=>{
     console.log(`acá en el PORT ${PORT}`)
 })
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: DB,
+        mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
+        ttl: 40
+    }),
+    secret:"CoderS3cret",
+    resave: false,
+    saveUninitialized: true
+}))
 
 app.get('/', (req, res) => {
     res.send('Hola')
 })
 app.use('/api/products/', productsRoutes)
 app.use('/api/carts/', cartsRoutes)
+app.use('/users', usersViewsRoutes)
+app.use('/api/sessions', sessionsRoutes)
 
 const socketServer = new Server(httpServer)
 socketServer.on('connection', socket =>{
@@ -43,7 +60,6 @@ socketServer.on('connection', socket =>{
     socket.emit('new-product', {products})
 })
 
-const DB = 'mongodb+srv://admin:admin@cluster0.28dpnsm.mongodb.net/ecommerce?retryWrites=true&w=majority'
 const connectMongoDB = async ()=>{
     try {
         await mongoose.connect(DB)

@@ -46,7 +46,6 @@ class CartService {
             return "El carrito no existe"
         }
         let product = cart.products.find(p => p.product.equals(productId))
-        console.log(product)
         if(!product){
             return "El producto no se encuentra en el carrito"
         } else {

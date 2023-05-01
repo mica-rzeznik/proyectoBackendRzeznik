@@ -1,0 +1,27 @@
+<div class="container-md mt-4">
+    <h1>Registro</h1>
+    <form class="row g-3 needs-validation" id="registerForm">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" name="first_name" required>
+            <label for="floatingInput">Nombre</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" name="last_name" required>
+            <label for="floatingInput">Apellido</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" name="email" required>
+            <label for="floatingInput">Email</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" name="age" required>
+            <label for="floatingInput">Edad</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" name="password" required>
+            <label for="floatingInput">Contraseña</label>
+        <input type="submit" class="btn btn-outline-success mt-2">
+    </form>
+    <p>¿Ya tienes una cuenta? <a href="/users/login">Ingresa aquí</a></p>
+</div>
+<script src="/js/register.js"></script>

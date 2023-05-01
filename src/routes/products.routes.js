@@ -18,11 +18,10 @@ router.get('/', async (req, res) => {
         const query = req.query.query
         const sort = req.query.sort
         const result = await productService.getAll(page, limit, query, sort)
-        console.log(result)
         const prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : ''
         const nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : ''
         const products = result.docs
-        res.render(path.join(__dirname, 'views', 'home'), {
+        res.render(path.join(__dirname, 'views', 'products'), {
             products: products,
             page: result.page,
             hasNextPage: result.hasNextPage,
@@ -33,7 +32,8 @@ router.get('/', async (req, res) => {
             prevLink: prevLink,
             nextLink: nextLink,
             isValid: result.isValid,
-            currentPage: page
+            currentPage: page,
+            user: req.session.user
         })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })
@@ -49,7 +49,7 @@ router.get('/:pid', async (req, res) => {
         // const productoId = [await producto.getProductById(parseInt(req.params.pid))]
         const productoId = [await productService.getId(req.params.pid)]
         // res.send(productoId)
-        res.render(path.join(__dirname, 'views', 'home'), {
+        res.render(path.join(__dirname, 'views', 'products'), {
             products: productoId
         })
     }catch(error){
