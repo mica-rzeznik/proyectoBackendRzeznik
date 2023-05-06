@@ -30,4 +30,8 @@ router.get('/private', auth,  (req, res)=>{
     res.send("Esto solo lo ve el admin")
 })
 
+router.get('/error', (req, res )=>{
+    res.render("error", {error: "Hubo un error."})
+})
+
 export default router

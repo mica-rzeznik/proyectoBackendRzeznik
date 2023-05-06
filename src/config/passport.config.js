@@ -74,7 +74,7 @@ const initializePassport = ()=>{
                 console.log(user)
                 if (!user) {
                     console.warn("Credenciales incorrectas")
-                    return done(null, false);
+                    return done(null, false)
                 }
                 if (!isValidPassword(user, password)) {
                     console.warn("Credenciales incorrectas")
