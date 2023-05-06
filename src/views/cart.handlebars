@@ -12,12 +12,15 @@
                         ${{this.product.price}} sickles de plata
                     </div>
                     <span class="badge bg-primary rounded-pill">{{this.quantity}}</span>
-                    <button class="btn btn-primary" onclick="agregarProducto('{{../this._id}}', '{{this.product._id}}')">+</button>
-                    <button class="btn btn-danger" onclick="eliminarProducto('{{../this._id}}', '{{this.product._id}}')">-</button>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                        <button class="btn btn-outline-secondary" onclick="agregarProducto('{{../this._id}}', '{{this.product._id}}')">+</button>
+                        <button class="btn btn-outline-secondary" onclick="eliminarProducto('{{../this._id}}', '{{this.product._id}}')">-</button>
+                    </div>
                 </li>
             </ol>
         {{/each}}
     </div>
     {{/each}}
+    <a href="/api/products"><button class="btn btn-primary" id="productos">Productos</button></a>
 </div>
 <script src="/js/index.js"></script>

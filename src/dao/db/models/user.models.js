@@ -13,7 +13,8 @@ const schema = mongoose.Schema({
     admin: {
         type: Boolean,
         default: false
-    }
+    },
+    loggedBy: String
 })
 
 const userModel = mongoose.model(collection,schema)

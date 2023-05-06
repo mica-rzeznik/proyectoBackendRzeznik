@@ -1,6 +1,4 @@
 import express from 'express'
-import productsRoutes from './routes/products.routes.js'
-import cartsRoutes from './routes/carts.routes.js'
 import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
@@ -9,8 +7,13 @@ import products from '../src/files/Productos.json' assert { type: "json" }
 import mongoose from 'mongoose'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import passport from 'passport'
+import initializePassport from './config/passport.config.js'
+import productsRoutes from './routes/products.routes.js'
+import cartsRoutes from './routes/carts.routes.js'
 import usersViewsRoutes from './routes/users.views.routes.js'
 import sessionsRoutes from './routes/sessions.routes.js'
+import githubLoginViewRouter from './routes/github-login.views.router.js'
 
 const app = express()
 const PORT = 8080
@@ -46,13 +49,18 @@ app.use(session({
     saveUninitialized: true
 }))
 
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.get('/', (req, res) => {
-    res.send('Hola')
+    res.redirect('/users/login')
 })
 app.use('/api/products/', productsRoutes)
 app.use('/api/carts/', cartsRoutes)
 app.use('/users', usersViewsRoutes)
 app.use('/api/sessions', sessionsRoutes)
+app.use('/github', githubLoginViewRouter)
 
 const socketServer = new Server(httpServer)
 socketServer.on('connection', socket =>{
