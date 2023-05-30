@@ -11,7 +11,7 @@ class ProductManager {
         this.code=code
         this.stock=stock
         this.category=category
-        this.path = "./src/files/Productos.json"
+        this.path = "./src/dao/filesystem/files/Productos.json"
     }
     addProduct = async (producto) => {
         try{

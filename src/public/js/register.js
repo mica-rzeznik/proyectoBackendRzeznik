@@ -5,12 +5,20 @@ form.addEventListener('submit',e=>{
     const data = new FormData(form)
     const obj = {}
     data.forEach((value,key)=>obj[key]=value)
-    fetch('/api/sessions/register',{
+    fetch('/api/jwt/register',{
         method:'POST',
         body:JSON.stringify(obj),
         headers:{
             'Content-Type':'application/json'
         }
-    }).then(result=>result.json()).then(json=>console.log(json))
-    .then(window.location.replace('/users/login'))
+    }).then(result=> {
+        if (result.status === 201) {
+            result.json();
+            alert("Usuario creado con éxito!")
+            window.location.replace('/users/login')
+        }else {
+            alert("No se pudo crear el usuario!")
+        }
+    }).then(
+        json=>console.log(json))
 })

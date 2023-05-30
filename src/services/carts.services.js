@@ -1,13 +1,12 @@
-import { cartModel } from '../db/models/carts.js'
-import mongoose from 'mongoose'
-import { productModel } from '../db/models/products.js'
+import mongoose from "mongoose"
+import { productModel } from "../models/products.models.js"
+import { cartModel } from "../models/carts.models.js"
 const ObjectId = mongoose.Types.ObjectId
 
-class CartService {
+export default class CartService {
     constructor() {
         console.log("Working products with Database persistence in mongodb")
     }
-
     getAll = async () => {
         let carritos = await cartModel.find()
         return carritos.map(c => c.toObject())
@@ -35,9 +34,7 @@ class CartService {
         } else {
             cart.products.push({product: productId, quantity: 1})
         }
-        // cart.products.push({product: productId})
         const newProduct = await cartModel.findByIdAndUpdate(cartId, { products: cart.products } )
-        console.log(JSON.stringify(cart, null, '\t'))
         return newProduct
     }
     deleteProduct = async (cartId, productId) => {
@@ -66,4 +63,3 @@ class CartService {
         await cart.save()
     }
 }
-export default CartService

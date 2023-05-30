@@ -3,7 +3,7 @@ import fs from 'fs'
 class CartManager {
     constructor (){
         this.products = []
-        this.path = "./src/files/Carritos.json"
+        this.path = "./src/dao/filesystem/files/Carritos.json"
     }
     addCart = async () => {
         try{
@@ -47,7 +47,7 @@ class CartManager {
             if (cartPosition < 0) {
                 throw new Error("Carrito no encontrado" )
             }
-            const allProducts = JSON.parse(await fs.promises.readFile('./src/files/Productos.json', 'utf-8'))
+            const allProducts = JSON.parse(await fs.promises.readFile('./src/dao/filesystem/files/Productos.json', 'utf-8'))
             const productPosition = allProducts.findIndex((p => p.id === productId))
             if (productPosition < 0) {
                 throw new Error("Producto no encontrado" )

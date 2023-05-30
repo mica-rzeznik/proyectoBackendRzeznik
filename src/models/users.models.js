@@ -10,9 +10,10 @@ const schema = mongoose.Schema({
     },
     age: Number,
     password: String,
-    admin: {
-        type: Boolean,
-        default: false
+    role: {
+        type: String,
+        default: 'user',
+        enum: ['user', 'admin'],
     },
     loggedBy: String
 })

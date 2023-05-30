@@ -30,7 +30,7 @@ const logout = document.getElementById('logout')
 
 logout.addEventListener('click',e=>{
     e.preventDefault()
-    fetch('/api/sessions/logout', {
+    fetch('/api/jwt/logout', {
         method: 'POST',
     }).then((response) => {
     if (response.ok) {

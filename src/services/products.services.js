@@ -1,12 +1,11 @@
-import { productModel } from '../db/models/products.js'
 import mongoose from 'mongoose'
+import { productModel } from '../models/products.models.js'
 const ObjectId = mongoose.Types.ObjectId
 
-class ProductService {
+export default class ProductService {
     constructor() {
         console.log("Working products with Database persistence in mongodb")
     }
-
     getAll = async (page, limit, query, sort) => {
         const options = {
             page: page || 1,
@@ -45,4 +44,3 @@ class ProductService {
         }
     }
 }
-export default ProductService

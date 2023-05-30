@@ -1,4 +1,4 @@
-import mongoose, {SchemaTypes} from 'mongoose'
+import mongoose from 'mongoose'
 
 const cartsCollection = 'carts'
 
