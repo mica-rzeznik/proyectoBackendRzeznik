@@ -1,0 +1,27 @@
+<div class="row row-cols-1 row-cols-md-3 g-4 gap-3">
+    {{#each cart}}
+    <div class="card m-4" style="width: 18rem;">
+        <div class="card-header fs-7">
+            <p style="margin-bottom: 0px">Id del carrito: {{this._id}}</p>
+        </div>
+        {{#each products}}
+            <ol class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                        <div class="fw-bold">{{this.product.title}}</div>
+                        ${{this.product.price}} sickles de plata
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{this.quantity}}</span>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                        <button class="btn btn-outline-secondary" onclick="agregarProducto('{{../this._id}}', '{{this.product._id}}')">+</button>
+                        <button class="btn btn-outline-secondary" onclick="eliminarProducto('{{../this._id}}', '{{this.product._id}}')">-</button>
+                    </div>
+                </li>
+            </ol>
+        {{/each}}
+        <button class="btn btn-primary" onclick="comprar('{{this._id}}')">Comprar</button>
+    </div>
+    {{/each}}
+    <a href="/api/products"><button class="btn btn-primary" id="productos">Productos</button></a>
+</div>
+<script src="/js/index.js"></script>
