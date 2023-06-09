@@ -17,8 +17,6 @@ export const getDatosController = async (req, res) => {
         const prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : ''
         const nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : ''
         const products = result.docs
-        console.log('datos user')
-        console.log(req.user)
         res.render(path.join(__dirname, 'views', 'products'), {
             products: products,
             page: result.page,
