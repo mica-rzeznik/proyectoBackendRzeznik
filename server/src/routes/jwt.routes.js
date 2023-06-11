@@ -24,16 +24,22 @@ router.post("/login", async (req, res)=>{
             console.warn("Invalid credentials for user: " + email)
             return res.status(401).send({status:"error",error:"El usuario y la contraseña no coinciden!"})
         }
-        if(!user.cart){
-            const cart = await cartService.save({})
-        }
+        const cartAnterior = await cartModel.findOne({_id: user.cart})
+        const cart = cartAnterior || await cartService.save({})
+        await userModel.findByIdAndUpdate(user._id, {
+            cart: cart._id,
+        })
         const tokenUser = {
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
             role: user.role,
-            cart: user.cart || cart
+            cart: cart._id
         }
+        console.log('carritos')
+        console.log(user.cart)
+        console.log(cartAnterior)
+        console.log(cart)
         const access_token = generateJWToken(tokenUser)
         console.log(access_token)
         res.cookie('jwtCookieToken', access_token , {
