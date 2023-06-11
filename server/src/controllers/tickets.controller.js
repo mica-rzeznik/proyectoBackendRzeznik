@@ -1,4 +1,5 @@
 import TicketService from "../services/db/tickets.services.js"
+import UserService from "../services/db/users.services.js"
 
 const ticketService = new TicketService()
 
@@ -12,8 +13,9 @@ export const getTicketById = async (req, res) => {
 }
 export const saveTicket = async (req, res) => {
     try {
-        const ticket = req.body
-        const result = await ticketService.save(ticket)
+        const cartId = req.params.cid
+        const user = req.user
+        const result = await ticketService.save(cartId, user)
         res.status(201).send({ message: "Success!", payload: result })
     } catch (error) {
         console.error("Hubo un problema creando el ticket.")

@@ -2,9 +2,13 @@ import { Router } from 'express'
 import { createHash, generateJWToken, isValidPassword } from '../utils.js'
 import passport from 'passport'
 import UserService from '../services/db/users.services.js'
+import CartService from '../services/db/carts.services.js'
+import { cartModel } from '../services/db/models/carts.models.js'
+import userModel from '../services/db/models/users.models.js'
 
 const router = Router()
 const userService = new UserService()
+const cartService = new CartService()
 
 router.post("/login", async (req, res)=>{
     const {email, password} = req.body
@@ -20,11 +24,15 @@ router.post("/login", async (req, res)=>{
             console.warn("Invalid credentials for user: " + email)
             return res.status(401).send({status:"error",error:"El usuario y la contraseña no coinciden!"})
         }
+        if(!user.cart){
+            const cart = await cartService.save({})
+        }
         const tokenUser = {
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
-            role: user.role
+            role: user.role,
+            cart: user.cart || cart
         }
         const access_token = generateJWToken(tokenUser)
         console.log(access_token)
@@ -40,21 +48,23 @@ router.post("/login", async (req, res)=>{
 })
 router.post("/register",  async (req, res)=>{
     const { first_name, last_name, email, age, password, role} = req.body
-    console.log("Registrando usuario:")
-    console.log(req.body)
     const exists = await userService.findByUsername(email)
+    const cart = await cartService.save({})
     if (exists){
         return res.status(401).send({status: "error", message: "Usuario ya existe."})
     }
-    const user = {
+    let user = await userService.save({})
+    let result = await userModel.findByIdAndUpdate(user._id, {
         first_name,
         last_name,
         email,
         age,
         password: createHash(password),
-        role
-    }
-    const result = await userService.save(user)
+        role,
+        cart: cart._id,
+        loggedBy: 'Registrado tradicionalmente'
+    })
+    console.log(result)
     res.status(201).send({status: "success", message: "Usuario creado con extito con ID: " + result.id})
 })
 router.post('/logout', (req, res) => {

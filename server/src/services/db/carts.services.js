@@ -28,13 +28,19 @@ export default class CartService {
         if(!product){
             return "El producto no existe"
         }
+        if (product.stock <= 0) {
+            return "El producto está agotado"
+        }
         let productRepe = cart.products.find(p => p.product.equals(productId))
         if (productRepe) {
             productRepe.quantity += 1
         } else {
             cart.products.push({product: productId, quantity: 1})
         }
+        product.stock -= 1
+        await product.save()
         const newProduct = await cartModel.findByIdAndUpdate(cartId, { products: cart.products } )
+        await cart.save()
         return newProduct
     }
     deleteProduct = async (cartId, productId) => {
@@ -43,6 +49,7 @@ export default class CartService {
             return "El carrito no existe"
         }
         let product = cart.products.find(p => p.product.equals(productId))
+        const stock = await productModel.findOne({_id: productId})
         if(!product){
             return "El producto no se encuentra en el carrito"
         } else {
@@ -52,6 +59,8 @@ export default class CartService {
                 product.quantity -= 1
             }
             await cart.save()
+            stock.stock += 1
+            await stock.save()
         }
     }
     deleteCart = async (cartId) => {
@@ -59,7 +68,7 @@ export default class CartService {
         if(!cart){
             return "El carrito no existe"
         }
-        cart.products = []
-        await cart.save()
+        // cart.products = []
+        await cart.deleteOne()
     }
 }

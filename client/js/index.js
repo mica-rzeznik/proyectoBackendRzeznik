@@ -47,7 +47,7 @@ function agregarProducto(cartId, productId) {
     fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'POST' })
     .then((response) => {
         if (response.ok) {
-            window.location.replace('/api/carts')
+            window.location.replace(`/api/carts/${cartId}`)
         } else {
             console.error('Error al agregar el producto')
         }})
@@ -58,7 +58,7 @@ function eliminarProducto(cartId, productId) {
     fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'DELETE' })
     .then((response) => {
         if (response.ok) {
-            window.location.replace('/api/carts')
+            window.location.replace(`/api/carts/${cartId}`)
         } else {
             console.error('Error al eliminar el producto')
         }})
@@ -69,7 +69,7 @@ function comprar(cartId) {
     fetch(`/api/tickets/${cartId}`, { method: 'POST' })
     .then((response) => {
         if (response.ok) {
-            window.location.replace('/api/carts')
+            window.location.replace(`/api/products`)
         } else {
             console.error('Error al generar el ticket')
         }})

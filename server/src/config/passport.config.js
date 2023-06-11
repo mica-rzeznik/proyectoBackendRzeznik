@@ -4,11 +4,13 @@ import { cookieExtractor, createHash, isValidPassword, PRIVATE_KEY } from '../ut
 import GitHubStrategy from 'passport-github2'
 import jwtStrategy from 'passport-jwt'
 import UserService from '../services/db/users.services.js'
+import CartService from '../services/db/carts.services.js'
 
 const JwtStrategy = jwtStrategy.Strategy
 const ExtractJWT = jwtStrategy.ExtractJwt
 const localStrategy = passportLocal.Strategy
 const userService = new UserService()
+const cartService = new CartService()
 
 const initializePassport = ()=>{
     passport.use('github', new GitHubStrategy(
@@ -24,6 +26,9 @@ const initializePassport = ()=>{
                 const user = await userService.findByUsername(profile._json.email)
                 console.log("Usuario encontrado para login:")
                 console.log(user)
+                if(!user.cart){
+                    const cart = await cartService.save({})
+                }
                 if (!user) {
                     console.warn("User doesn't exists with username: " + profile._json.email)
                     let newUser = {
@@ -32,8 +37,9 @@ const initializePassport = ()=>{
                         age: 18,
                         email: profile._json.email,
                         password: '',
-                        role,
-                        loggedBy: "GitHub"
+                        role: 'user',
+                        loggedBy: "GitHub",
+                        cart: user.cart || cart
                     }
                     const result = await userService.save(newUser)
                     return done(null, result)

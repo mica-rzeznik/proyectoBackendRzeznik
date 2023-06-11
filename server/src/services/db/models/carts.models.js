@@ -13,13 +13,29 @@ const cartSchema = new mongoose.Schema({
                 quantity: {
                     type: Number,
                     default: 1
+                },
+                partialAmount: {
+                    type: Number,
+                    default: 0
                 }
             }
         ],
         default: []
+    },
+    totalAmount: {
+        type: Number,
+        default: 0
     }
 })
-
+cartSchema.pre('save', function(next) {
+    const cart = this
+    cart.totalAmount = 0
+    for (const product of cart.products) {
+        product.partialAmount = product.product.price * product.quantity
+        cart.totalAmount += product.partialAmount
+    }
+    next()
+})
 cartSchema.pre('findOne', function (){
     this.populate("products.product")
 })

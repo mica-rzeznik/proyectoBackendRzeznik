@@ -2,27 +2,42 @@ import mongoose from 'mongoose'
 
 const collection = "users"
 
+const stringTypeSchemaUniqueRequired = {
+    type: String,
+    unique: true,
+    required: true
+}
+
+const stringTypeSchemaNonUniqueRequired = {
+    type: String,
+    unique: false,
+    required: true
+}
+
+const numberTypeSchemaNonUniqueRequired = {
+    type: Number,
+    unique: false,
+    required: true
+}
+
 const schema = mongoose.Schema({
-    first_name: String,
-    last_name: String,
-    email: {
-        type:String,
-        unique:true
-    },
-    age: Number,
-    password: String,
+    first_name: stringTypeSchemaNonUniqueRequired,
+    last_name: stringTypeSchemaNonUniqueRequired,
+    email: stringTypeSchemaUniqueRequired,
+    age: numberTypeSchemaNonUniqueRequired,
+    password: stringTypeSchemaNonUniqueRequired,
     role: {
         type: String,
         default: 'user',
         enum: ['user', 'admin'],
     },
-    loggedBy: String,
-    orders: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'orders'
-        }
-    ]
+    loggedBy: stringTypeSchemaNonUniqueRequired,
+    cart: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'carts',
+        unique: true,
+        required: true
+    }
 })
 
 const userModel = mongoose.model(collection,schema)

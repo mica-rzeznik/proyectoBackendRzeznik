@@ -12,7 +12,7 @@ let productService = new ProductService()
 const userService = new UserService()
 const socket = ioClient('http://localhost:8080')
 
-router.get('/', passportCall('login'),getDatosController)
+router.get('/', passportCall('login'), getDatosController)
 
 router.get('/realtimeproducts', async (req, res) => {
     res.render(path.join(__dirname, 'views', 'realTimeProducts'))
