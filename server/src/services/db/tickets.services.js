@@ -11,15 +11,19 @@ export default class TicketService {
         return ticket.map(ticket => ticket.toObject())
     }
     getId = async (id) => {
-        const result = await ticketsModel.findOne({ _id: id })
-        return result
+        // const result = await ticketsModel.findOne({ _id: id })
+        // return result
+        let result = await ticketsModel.findById(id)
+        return result.toObject()
     }
     save = async (cartId, user) => {
         const userCompleto = await userModel.findOne({email: user.email})
         let ticket = await ticketsModel.create({})
-        const cart = await cartModel.findOne({_id: cartId}).populate("products")
+        const cart = await cartModel.findOne({_id: cartId})
         let result = await ticketsModel.findByIdAndUpdate(ticket._id, {
             purchaser: userCompleto._id,
+            purchaser_name: `${userCompleto.first_name} ${userCompleto.last_name}`,
+            purchaser_email: userCompleto.email,
             cart: cartId,
             amount: cart.totalAmount
         })

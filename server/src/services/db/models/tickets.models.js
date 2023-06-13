@@ -17,6 +17,12 @@ const schema = new moongose.Schema({
         type: moongose.SchemaTypes.ObjectId,
         ref: 'users'
     },
+    purchaser_name: {
+        type: String
+    },
+    purchaser_email: {
+        type: String
+    },
     cart: {
         type: moongose.SchemaTypes.ObjectId,
         ref: 'carts'
@@ -24,12 +30,12 @@ const schema = new moongose.Schema({
     amount: Number
 })
 
-schema.pre('findOne', function() {
-    this.populate('users.users carts.carts')
-})
-schema.pre('find', function (){
-    this.populate('users.users carts.carts')
-})
+// schema.pre('findOne', function() {
+//     this.populate('users.users carts.carts')
+// })
+// schema.pre('find', function (){
+//     this.populate('users.users carts.carts')
+// })
 
 const ticketsModel = moongose.model(collection, schema)
 export default ticketsModel

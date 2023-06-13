@@ -36,10 +36,6 @@ router.post("/login", async (req, res)=>{
             role: user.role,
             cart: cart._id
         }
-        console.log('carritos')
-        console.log(user.cart)
-        console.log(cartAnterior)
-        console.log(cart)
         const access_token = generateJWToken(tokenUser)
         console.log(access_token)
         res.cookie('jwtCookieToken', access_token , {
