@@ -20,10 +20,10 @@ router.get('/realtimeproducts', async (req, res) => {
 
 router.get('/:pid', getIdDatosController)
 
-router.post('/', postDatosController)
+router.post('/', passportCall('login'), authorization('admin'), postDatosController)
 
-router.put('/:pID', putDatosController)
+router.put('/:pID', passportCall('login'), authorization('admin'), putDatosController)
 
-router.delete('/:pID', deleteDatosController)
+router.delete('/:pID', passportCall('login'), authorization('admin'), deleteDatosController)
 
 export default router

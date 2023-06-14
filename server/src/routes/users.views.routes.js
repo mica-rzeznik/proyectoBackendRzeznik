@@ -1,6 +1,7 @@
 import {Router} from 'express'
 import { passportCall, authorization, authToken } from '../utils.js'
 import UserService from '../services/db/users.services.js'
+import UsersDto from '../services/dto/user.dto.js'
 
 const router = Router()
 const userService = new UserService()
@@ -13,12 +14,9 @@ router.get('/register', (req, res)=>{
     res.render('register')
 })
 
-router.get('/', (req, res)=>{
-    passportCall('jwt'),
-    authorization('user'),
-    (req, res)=>{
-        res.render('profile',{user: req.user})
-    }
+router.get('/', passportCall('login'), authorization('user'), (req, res)=>{
+    const user = new UsersDto(req.user)
+    res.render('profile',{user: user})
 })
 
 // usuario admin: adminCoder@coder.com

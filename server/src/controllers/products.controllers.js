@@ -1,11 +1,9 @@
 import path from "path"
 import __dirname from "../utils.js"
 import ProductService from "../services/db/products.services.js"
-import UserService from "../services/db/users.services.js"
-import { authToken } from "../utils.js"
+import UsersDto from "../services/dto/user.dto.js"
 
 const productService = new ProductService()
-const userService = new UserService()
 
 export const getDatosController = async (req, res) => {
     try{

@@ -18,8 +18,6 @@ export const saveTicket = async (req, res) => {
         const result = await ticketService.save(cartId, user)
         const resultId = result._id
         let ticket = await ticketService.getId(resultId)
-        console.log('ticket completo?')
-        console.log(ticket)
         sendEmail(req, res, ticket)
         res.status(201).send({ message: "Success!", payload: result })
     } catch (error) {

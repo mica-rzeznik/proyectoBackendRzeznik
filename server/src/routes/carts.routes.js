@@ -1,7 +1,7 @@
 import Router from 'express'
 const router = Router()
 import path from 'path'
-import __dirname, { passportCall } from '../utils.js'
+import __dirname, { authorization, passportCall } from '../utils.js'
 import ioClient from 'socket.io-client'
 import { deleteDatosController, deleteProductDatosController, getDatosController, getIdDatosController, postDatosController, postProductDatosController } from '../controllers/carts.controllers.js'
 
@@ -11,7 +11,7 @@ router.get('/:cID', getIdDatosController)
 
 router.post('/', postDatosController)
 
-router.post('/:cid/products/:pid', postProductDatosController)
+router.post('/:cid/products/:pid', passportCall('login'), authorization('user'), postProductDatosController)
 
 router.delete('/:cid/products/:pid', deleteProductDatosController)
 
