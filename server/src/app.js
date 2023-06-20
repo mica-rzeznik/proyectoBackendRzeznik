@@ -18,6 +18,7 @@ import githubLoginViewRouter from '../src/routes/github-login.views.router.js'
 import jwtRouter from '../src/routes/jwt.routes.js'
 import ticketsRouter from './routes/tickets.router.js'
 import emailRouter from './routes/email.routes.js'
+import mockingRouter from './routes/mocking.router.js'
 import config from '../src/config/config.js'
 import cors from 'cors'
 import MongoSingleton from './config/mongodb-singleton.js'
@@ -77,6 +78,7 @@ app.use('/github', githubLoginViewRouter)
 app.use('/api/jwt', jwtRouter)
 app.use('/api/tickets', ticketsRouter)
 app.use("/api/email", emailRouter)
+app.use('/mockingproducts', mockingRouter)
 
 socketServer.on('connection', socket =>{
     console.log("Nuevo cliente conectado")

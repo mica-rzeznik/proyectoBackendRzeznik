@@ -3,11 +3,31 @@ import { dirname } from 'path'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
+import { faker } from '@faker-js/faker'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+faker.locale = 'es'
 
 export default __dirname
+
+export const generateProducts = () => {
+    const categoriaAleatoria = () => {
+        const categorias = ['golosinas', 'chocolate', 'pastelería', 'azucarados']
+        const i = Math.floor(Math.random() * categorias.length)
+        return categorias[i]
+    }
+    return {
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price(),
+        thumbnail: faker.image.image(),
+        code: faker.lorem.word(),
+        stock: faker.random.numeric(1),
+        category: categoriaAleatoria(),
+        id: faker.database.mongodbObjectId()
+    }
+}
 
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
