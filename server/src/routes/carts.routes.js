@@ -4,6 +4,9 @@ import path from 'path'
 import __dirname, { authorization, passportCall } from '../utils.js'
 import ioClient from 'socket.io-client'
 import { deleteDatosController, deleteProductDatosController, getDatosController, getIdDatosController, postDatosController, postProductDatosController } from '../controllers/carts.controllers.js'
+import errorHandler from '../services/error/middlewares/index.js'
+
+// router.use(errorHandler)
 
 router.get('/', passportCall('login'), getDatosController)
 

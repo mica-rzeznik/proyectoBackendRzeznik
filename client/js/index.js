@@ -49,7 +49,10 @@ function agregarProducto(cartId, productId) {
         if (response.ok) {
             window.location.replace(`/api/carts/${cartId}`)
         } else {
-            console.error('Error al agregar el producto')
+            return response.json().then((error) => {
+                console.log(error.cause)
+                alert('No se pudo agregar el producto al carrito: ' + error.message)
+            })
         }})
     .catch(error => console.error(error))
 }

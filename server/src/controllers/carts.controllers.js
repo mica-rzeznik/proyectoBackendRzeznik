@@ -1,8 +1,15 @@
 import path from "path"
 import __dirname from "../utils.js"
 import CartService from "../services/db/carts.services.js"
+import ProductService from "../services/db/products.services.js"
+import CustomError from "../services/error/CustomError.js"
+import { addProductErrorInfo } from "../services/error/messages/productoCarrito-error.message.js"
+import EErrors from "../services/error/errors-enum.js"
+import { productModel } from "../services/db/models/products.models.js"
+import { cartModel } from "../services/db/models/carts.models.js"
 
 let cartService = new CartService()
+let productService = new ProductService()
 
 export const getDatosController = async (req, res) => {
     try{
@@ -36,10 +43,20 @@ export const postProductDatosController = async (req, res) => {
     try{
         const cartId = req.params.cid
         const productId = req.params.pid
+        const cart = await cartModel.findOne({_id: cartId})
+        const product = await productModel.findOne({_id: productId})
+        if (!product || !cart) {
+            CustomError.createError({
+                name: "Add Product to Cart Error",
+                cause: addProductErrorInfo(productId, cartId),
+                message: "Error tratando de agregar el producto al carrito",
+                code: EErrors.ROUTING_ERROR
+            })
+        }
         await cartService.saveProduct(cartId, productId)
         res.status(200).redirect('/api/products')
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
 }
 export const deleteProductDatosController = async (req, res) => {

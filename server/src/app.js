@@ -22,6 +22,7 @@ import mockingRouter from './routes/mocking.router.js'
 import config from '../src/config/config.js'
 import cors from 'cors'
 import MongoSingleton from './config/mongodb-singleton.js'
+import compression from 'express-compression'
 
 const app = express()
 const PORT = config.port
@@ -70,6 +71,7 @@ app.use(passport.initialize())
 app.get('/', (req, res) => {
     res.redirect('/users/login')
 })
+app.use(compression())
 app.use('/api/products/', productsRoutes)
 app.use('/api/carts/', cartsRoutes)
 app.use('/users', usersViewsRoutes)

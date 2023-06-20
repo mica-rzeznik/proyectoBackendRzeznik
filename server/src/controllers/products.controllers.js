@@ -2,6 +2,9 @@ import path from "path"
 import __dirname from "../utils.js"
 import ProductService from "../services/db/products.services.js"
 import UsersDto from "../services/dto/user.dto.js"
+import CustomError from "../services/error/CustomError.js"
+import { generateProductErrorInfo } from "../services/error/messages/product-creation-error.message.js"
+import EErrors from "../services/error/errors-enum.js"
 
 const productService = new ProductService()
 
@@ -48,10 +51,22 @@ export const getIdDatosController = async (req, res) => {
 export const postDatosController = async (req, res) => {
     try{
         let product = req.body
+        console.log('--probando--')
+        console.log(product.title)
+        let title = product.title
+        console.log(title)
+        if (!title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock || !product.category) {
+            CustomError.createError({
+                name: "Product Creation Error",
+                cause: generateProductErrorInfo(product),
+                message: "Error tratando de crear el producto",
+                code: EErrors.INVALID_TYPES_ERROR
+            })
+        }
         const newProduct = await productService.save(product)
-        res.status(200).send( { status: "Success", message: `Producto agregado con éxito con ID: ${product.id}`, data: newProduct })
+        res.status(201).send( { status: "Success", message: `Producto agregado con éxito con ID: ${product.id}`, data: newProduct })
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
 }
 

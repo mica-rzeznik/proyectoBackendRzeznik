@@ -30,7 +30,7 @@ function auth(req, res, next){
     }
 }
 
-router.get('/private', auth,  (req, res)=>{
+router.get('/private', passportCall('login'), authorization('admin'),  (req, res)=>{
     res.send("Esto solo lo ve el admin")
 })
 
