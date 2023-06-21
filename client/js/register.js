@@ -17,7 +17,10 @@ form.addEventListener('submit',e=>{
             alert("Usuario creado con éxito!")
             window.location.replace('/users/login')
         }else {
-            alert("No se pudo crear el usuario!")
+            return result.json().then((error) => {
+                console.log(error.cause)
+                alert('No se pudo crear el usuario: ' + error.message)
+            })
         }
     }).then(
         json=>console.log(json))

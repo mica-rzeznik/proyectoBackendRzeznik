@@ -69,7 +69,6 @@ export const deleteProductDatosController = async (req, res) => {
         res.status(500).send({ status: "Error", message: error.message })
     }
 }
-
 export const deleteDatosController = async (req, res) => {
     try{
         const cartId = req.params.cid
