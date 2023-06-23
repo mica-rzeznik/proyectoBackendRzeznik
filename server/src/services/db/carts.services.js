@@ -1,9 +1,6 @@
 import mongoose from "mongoose"
 import { productModel } from "./models/products.models.js"
 import { cartModel } from "./models/carts.models.js"
-import CustomError from "../error/CustomError.js"
-import { addProductErrorInfo } from "../error/messages/productoCarrito-error.message.js"
-import EErrors from "../error/errors-enum.js"
 const ObjectId = mongoose.Types.ObjectId
 
 export default class CartService {
@@ -25,14 +22,6 @@ export default class CartService {
     saveProduct = async (cartId, productId) => {
         const cart = await cartModel.findOne({_id: cartId}).populate("products")
         const product = await productModel.findOne({_id: productId})
-        // if (!product || !cart) {
-        //     throw CustomError.createError({
-        //         name: "Add Product to Cart Error",
-        //         cause: addProductErrorInfo(productId, cartId),
-        //         message: "Error tratando de agregar el producto al carrito",
-        //         code: EErrors.ROUTING_ERROR
-        //     })
-        // }
         if(!cart){
             return "El carrito no existe"
         }

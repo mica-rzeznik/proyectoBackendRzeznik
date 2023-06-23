@@ -19,6 +19,7 @@ import jwtRouter from '../src/routes/jwt.routes.js'
 import ticketsRouter from './routes/tickets.router.js'
 import emailRouter from './routes/email.routes.js'
 import mockingRouter from './routes/mocking.router.js'
+import chatRouter from './routes/chat.routes.js'
 import config from '../src/config/config.js'
 import cors from 'cors'
 import MongoSingleton from './config/mongodb-singleton.js'
@@ -81,6 +82,7 @@ app.use('/api/jwt', jwtRouter)
 app.use('/api/tickets', ticketsRouter)
 app.use("/api/email", emailRouter)
 app.use('/mockingproducts', mockingRouter)
+app.use('/chat', chatRouter)
 
 socketServer.on('connection', socket =>{
     console.log("Nuevo cliente conectado")
