@@ -1,13 +1,18 @@
 <div>
     <form class="row g-3 needs-validation m-3" id="chat">
         <div class="form-floating mb-3">
-            <input name="message" type="text" class="form-control" id="floatingInput" required>
+            <input name="message" type="text" class="form-control" id="mensaje" required>
             <label for="floatingInput">Escriba su mensaje</label>
         </div>
         <input type="submit" class="btn btn-outline-success">
     </form>
-    <div class="row row-cols-1 row-cols-md-5 g-4 gap-3 m-2">
-        {{#each message}}
+    <div class="row row-cols-1 row-cols-md-5 g-4 gap-3 m-2" id="messageLogs"></div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js"></script>
+
+
+{{!-- {{#each message}}
             <div class="card">
                 <div class="card-header">
                     {{user}}
@@ -18,7 +23,4 @@
                     </blockquote>
                 </div>
             </div>
-        {{/each}}
-    </div>
-</div>
-<script src="/js/chat.js"></script>
+        {{/each}} --}}

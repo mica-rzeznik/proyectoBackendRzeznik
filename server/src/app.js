@@ -4,7 +4,6 @@ import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import path from 'path'
 import products from './services/filesystem/files/Productos.json' assert { type: "json" }
-import mongoose from 'mongoose'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
@@ -24,6 +23,8 @@ import config from '../src/config/config.js'
 import cors from 'cors'
 import MongoSingleton from './config/mongodb-singleton.js'
 import compression from 'express-compression'
+import { getChatsRealTimeController } from './controllers/chats.controllers.js'
+import ChatService from './services/db/chats.services.js'
 
 const app = express()
 const PORT = config.port
@@ -49,7 +50,7 @@ app.use('/js', express.static(path.join(__dirname, 'client', 'js')))
 
 app.use(cookieParser('CoderS3cr3tC0d3'))
 
-const httpServer = app.listen(PORT, ()=>{
+export const httpServer = app.listen(PORT, ()=>{
     console.log(`acá en el PORT ${PORT}`)
 })
 const socketServer = new Server(httpServer)
@@ -83,12 +84,18 @@ app.use('/api/tickets', ticketsRouter)
 app.use("/api/email", emailRouter)
 app.use('/mockingproducts', mockingRouter)
 app.use('/chat', chatRouter)
-
-socketServer.on('connection', socket =>{
-    console.log("Nuevo cliente conectado")
-    socket.emit('new-product', {products})
+const chatService = new ChatService()
+socketServer.on('connection', async (socket) => {
+    console.log("Nuevo cliente conectado");
+    try {
+        const messages = await chatService.getAll()
+        const reverseMessages = messages.slice().reverse()
+        socket.emit('message', reverseMessages)
+        console.log('1')
+    } catch (error) {
+        console.error('Error al obtener los mensajes:', error)
+    }
 })
-
 
 const mongoInstance = async () => {
     try {
