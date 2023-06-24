@@ -17,14 +17,11 @@ router.get("/githubcallback", passport.authenticate('github', {failureRedirect: 
 })
 
 router.post("/register", passport.authenticate('register', { failureRedirect: '/api/sessions/fail-register' }), async (req, res) => {
-    console.log("Registrando nuevo usuario.")
     res.status(201).send({ status: "success", message: "Usuario creado con éxito." })
 })
 
 router.post("/login", passport.authenticate('login', { failureRedirect: '/api/sessions/fail-login' }), async (req, res) => {
-    console.log("User found to login:")
     const user = req.user
-    console.log(user)
     if (!user) return res.status(401).send({ status: "error", error: "El usuario y la contraseña no coinciden!" })
     req.session.user = {
         name: `${user.first_name} ${user.last_name}`,

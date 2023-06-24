@@ -51,10 +51,7 @@ export const getIdDatosController = async (req, res) => {
 export const postDatosController = async (req, res) => {
     try{
         let product = req.body
-        console.log('--probando--')
-        console.log(product.title)
         let title = product.title
-        console.log(title)
         if (!title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock || !product.category) {
             CustomError.createError({
                 name: "Product Creation Error",

@@ -16,14 +16,10 @@ export const loginController = async (req, res)=>{
     const {email, password} = req.body
     try {
         const user = await userService.findByUsername(email)
-        console.log("Usuario encontrado para login:")
-        console.log(user)
         if(!user){
-            console.warn("User doesn't exists with username: " + email)
             return res.status(204).send({error: "Not found", message: "Usuario no encontrado con username: " + email}) 
         }
         if(!isValidPassword(user, password)){
-            console.warn("Invalid credentials for user: " + email)
             return res.status(401).send({status:"error",error:"El usuario y la contraseña no coinciden!"})
         }
         const cartAnterior = await cartModel.findOne({_id: user.cart})
@@ -39,7 +35,6 @@ export const loginController = async (req, res)=>{
             cart: cart._id
         }
         const access_token = generateJWToken(tokenUser)
-        console.log(access_token)
         res.cookie('jwtCookieToken', access_token , {
             maxAge: 100000,
             httpOnly: true
@@ -78,7 +73,6 @@ export const registerController = async (req, res)=>{
             cart: cart._id,
             loggedBy: 'Registrado tradicionalmente'
         })
-        console.log(result)
         res.status(201).send({status: "success", message: "Usuario creado con extito con ID: " + result.id})
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })

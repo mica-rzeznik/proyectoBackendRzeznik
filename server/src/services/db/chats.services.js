@@ -1,9 +1,6 @@
 import { chatModel } from "./models/chat.models.js"
 
 export default class ChatService {
-    constructor() {
-        console.log("Working messages with Database persistence in mongodb")
-    }
     getAll = async () => {
         let messages = await chatModel.find()
         return messages.map(c => c.toObject())

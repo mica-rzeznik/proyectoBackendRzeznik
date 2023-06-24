@@ -21,7 +21,6 @@ export const saveTicket = async (req, res) => {
         sendEmail(req, res, ticket)
         res.status(201).send({ message: "Success!", payload: result })
     } catch (error) {
-        console.error("Hubo un problema creando el ticket:", error)
         res.status(500).send({ error: error })
     }
 }

@@ -4,9 +4,6 @@ import { cartModel } from "./models/carts.models.js"
 const ObjectId = mongoose.Types.ObjectId
 
 export default class CartService {
-    constructor() {
-        console.log("Working products with Database persistence in mongodb")
-    }
     getAll = async () => {
         let carritos = await cartModel.find()
         return carritos.map(c => c.toObject())

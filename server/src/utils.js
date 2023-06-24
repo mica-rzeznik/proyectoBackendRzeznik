@@ -32,7 +32,6 @@ export const generateProducts = () => {
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 
 export const isValidPassword = (user, password )=>{
-    console.log(`Datos a validar: user-password: ${user.password}, password: ${password}`)
     return bcrypt.compareSync(password, user.password)
 }
 
@@ -44,8 +43,6 @@ export const generateJWToken = (user) => {
 
 export const authToken = (req, res, next) => {
     const authHeader = req.headers.authorization
-    console.log("Token present in header auth:")
-    console.log(authHeader)
     if (!authHeader) {
         return res.status(401).send({error: "User not authenticated or missing token."})
     }
@@ -53,22 +50,17 @@ export const authToken = (req, res, next) => {
     jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
         if (error) return res.status(403).send({error: "Token invalid, Unauthorized!"})
         req.user = credentials.user
-        console.log(req.user)
         next()
     })
 }
 
 export const passportCall = (strategy) => {
     return async (req, res, next) => {
-        console.log("Entrando a llamar strategy: ")
-        console.log(strategy)
         passport.authenticate(strategy, function (err, user, info) {
             if (err) return next(err)
             if (!user) {
                 return res.status(401).send({error: info.messages?info.messages:info.toString()})
             }
-            console.log("Usuario obtenido del strategy: ")
-            console.log(user)
             req.user = user
             next()
         })(req, res, next)
@@ -87,13 +79,8 @@ export const authorization = (role) => {
 
 export const cookieExtractor = req =>{
     let token = null;
-    console.log("Entrando a cookie extractor")
     if(req && req.cookies){
-        console.log("Cookies presentes!")
-        console.log(req.cookies)
         token = req.cookies['jwtCookieToken']
-        console.log("token obtenido desde cookie")
-        console.log(token)
     }
     return token
 }

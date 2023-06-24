@@ -8,7 +8,6 @@ const socket = ioClient('http://localhost:8080')
 
 export const getChatSocketController = async (req, res) => {
     try{
-        console.log('3')
         res.render(path.join(__dirname, 'views', 'chat'))
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
@@ -31,10 +30,8 @@ export const postChatsController = async (req, res) => {
     try{
         let message = req.body
         let user = req.user.name
-        // let user = 'userPrueba'
         const newMessage = await chatService.save(message, user)
         socket.emit('message', newMessage)
-        console.log('2')
         res.status(201).send( { status: "Success", message: `Mensaje enviado con éxito`, data: newMessage })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })

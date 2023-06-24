@@ -1,9 +1,6 @@
 import userModel from "./models/users.models.js"
 
 export default class UserService {
-    constructor() {
-        console.log("Working users with Database persistence in mongodb")
-    }
     getAll = async () => {
         let users = await userModel.find()
         return users.map(user=>user.toObject())

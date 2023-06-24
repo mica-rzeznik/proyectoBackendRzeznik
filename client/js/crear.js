@@ -22,6 +22,5 @@ form.addEventListener('submit',e=>{
                 alert('No se pudo crear el producto: ' + error.message)
             })
         }
-    }).then(
-        json=>console.log(json))
+    })
 })

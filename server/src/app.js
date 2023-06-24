@@ -86,12 +86,11 @@ app.use('/mockingproducts', mockingRouter)
 app.use('/chat', chatRouter)
 const chatService = new ChatService()
 socketServer.on('connection', async (socket) => {
-    console.log("Nuevo cliente conectado");
+    console.log("Nuevo cliente conectado")
     try {
         const messages = await chatService.getAll()
         const reverseMessages = messages.slice().reverse()
         socket.emit('message', reverseMessages)
-        console.log('1')
     } catch (error) {
         console.error('Error al obtener los mensajes:', error)
     }

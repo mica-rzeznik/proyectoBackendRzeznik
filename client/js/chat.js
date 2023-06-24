@@ -10,7 +10,6 @@ const messageLogs = document.getElementById('messageLogs')
 
 socket.on('message', data => {
     let x = ''
-    console.log('Datos recibidos:', data)
     data.forEach(y=>{
         x += 
             `<div class="card">
@@ -45,10 +44,7 @@ chat.addEventListener('submit',e=>{
             // alert("Chat enviado con éxito!")
             // window.location.replace('/chat')
             .then(user => {
-                console.log('4')
                 socket.emit('message', { user: user.first_name, message: mensaje.value })
-                console.log(user.first_name)
-                console.log(mensaje.value)
             })
             mensaje.value = ''
             window.location.reload()

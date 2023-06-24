@@ -20,17 +20,12 @@ const initializePassport = ()=>{
             callbackUrl: 'http://localhost:8080/api/jwt/githubcallback'
         }, 
         async (accessToken, refreshToken, profile, done) => {
-            console.log("Profile obtenido del usuario: ")
-            console.log(profile)
             try {
                 const user = await userService.findByUsername(profile._json.email)
-                console.log("Usuario encontrado para login:")
-                console.log(user)
                 if(!user.cart){
                     const cart = await cartService.save({})
                 }
                 if (!user) {
-                    console.warn("User doesn't exists with username: " + profile._json.email)
                     let newUser = {
                         first_name: profile._json.name,
                         last_name: '',
@@ -58,7 +53,6 @@ const initializePassport = ()=>{
             try {
                 const exists = await userService.findByUsername( email )
                 if (exists) {
-                    console.log("El usuario ya existe.")
                     return done(null, false)
                 }
                 const user = {
@@ -83,16 +77,6 @@ const initializePassport = ()=>{
             secretOrKey: PRIVATE_KEY
         }, async(jwt_payload, done)=>{
             try {
-                // const user = await userService.findByUsername({ email: username })
-                // if (!user) {
-                //     console.warn("Credenciales incorrectas")
-                //     return done(null, false)
-                // }
-                // if (!isValidPassword(user, password)) {
-                //     console.warn("Credenciales incorrectas")
-                //     return done(null, false)
-                // }
-                // return done(null, user)
                 return done(null, jwt_payload.user)
             } catch (error) {
                 return done(error)
