@@ -5,6 +5,7 @@ import GitHubStrategy from 'passport-github2'
 import jwtStrategy from 'passport-jwt'
 import UserService from '../services/db/users.services.js'
 import CartService from '../services/db/carts.services.js'
+import logger from './logger.js'
 
 const JwtStrategy = jwtStrategy.Strategy
 const ExtractJWT = jwtStrategy.ExtractJwt
@@ -91,7 +92,7 @@ const initializePassport = ()=>{
             let user = await userService.findById(id)
             done(null, user)
         } catch (error) {
-            console.error("Error deserializando el usuario: " + error)
+            logger.error("Error deserializando el usuario: " + error)
         }
     })
 }

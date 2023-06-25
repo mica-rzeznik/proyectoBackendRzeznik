@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
 import config from '../config/config.js'
 import __dirname from '../utils.js'
+import logger from '../config/logger.js'
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -13,9 +14,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
     if (error) {
-        console.log(error)
+        logger.error(error)
     } else {
-        console.log('Server is ready to take our messages')
+        logger.debug('Server is ready to take our messages')
     }
 })
 

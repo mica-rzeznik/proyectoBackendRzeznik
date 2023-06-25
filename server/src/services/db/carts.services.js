@@ -31,13 +31,15 @@ export default class CartService {
         let productRepe = cart.products.find(p => p.product.equals(productId))
         if (productRepe) {
             productRepe.quantity += 1
+            productRepe.partialAmount = productRepe.product.price * productRepe.quantity
         } else {
-            cart.products.push({product: productId, quantity: 1})
+            cart.products.push({ product: productId, quantity: 1, partialAmount: product.price })
         }
         product.stock -= 1
         await product.save()
-        const newProduct = await cartModel.findByIdAndUpdate(cartId, { products: cart.products } )
+        cart.totalAmount = cart.products.reduce((total, p) => total + (p.partialAmount || 0), 0)
         await cart.save()
+        const newProduct = await cartModel.findByIdAndUpdate(cartId, { products: cart.products } )
         return newProduct
     }
     deleteProduct = async (cartId, productId) => {

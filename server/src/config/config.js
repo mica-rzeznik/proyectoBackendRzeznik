@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import { Command } from 'commander'
+import logger from './logger.js'
 
 const program = new Command()
 

@@ -18,7 +18,7 @@ form.addEventListener('submit',e=>{
             window.location.replace('/api/products')
         } else {
             return result.json().then((error) => {
-                console.log(error.cause)
+                console.error(error.cause)
                 alert('No se pudo crear el producto: ' + error.message)
             })
         }

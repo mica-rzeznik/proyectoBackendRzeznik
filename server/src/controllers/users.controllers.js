@@ -36,12 +36,12 @@ export const loginController = async (req, res)=>{
         }
         const access_token = generateJWToken(tokenUser)
         res.cookie('jwtCookieToken', access_token , {
-            maxAge: 100000,
+            maxAge: 1000000,
             httpOnly: true
         })
         res.send({message: "Login successful!"})
     } catch (error) {
-        console.error(error)
+        req.logger.error(error)
         return res.status(500).send({status:"error",error:"Error interno de la applicacion."})
     }
 }

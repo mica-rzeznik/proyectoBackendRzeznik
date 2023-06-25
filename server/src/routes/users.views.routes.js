@@ -47,7 +47,7 @@ router.get("/:userId", authToken, async (req, res) =>{
         }
         res.json(user)
     } catch (error) {
-        console.error("Error consultando el usuario con ID: " + userId)
+        req.logger.error("Error consultando el usuario con ID: " + userId)
     }
 })
 

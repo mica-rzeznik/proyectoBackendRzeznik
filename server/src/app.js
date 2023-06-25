@@ -3,7 +3,6 @@ import __dirname from './utils.js'
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import path from 'path'
-import products from './services/filesystem/files/Productos.json' assert { type: "json" }
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import cookieParser from 'cookie-parser'
@@ -19,19 +18,21 @@ import ticketsRouter from './routes/tickets.router.js'
 import emailRouter from './routes/email.routes.js'
 import mockingRouter from './routes/mocking.router.js'
 import chatRouter from './routes/chat.routes.js'
+import loggerRouter from './routes/logger.routes.js'
 import config from '../src/config/config.js'
 import cors from 'cors'
 import MongoSingleton from './config/mongodb-singleton.js'
 import compression from 'express-compression'
-import { getChatsRealTimeController } from './controllers/chats.controllers.js'
 import ChatService from './services/db/chats.services.js'
+import logger, { addLogger } from './config/logger.js'
 
 const app = express()
 const PORT = config.port
 const DB = config.mongoUrl
-console.log(config)
+logger.debug(config)
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(addLogger)
 app.use(cors())
 // lo estoy haciendo así porque al hacerlo como lo vimos en clase me saltaba el error Error: Failed to lookup view "index" in views directory "C:\Users\micar\Desktop\Full Stack\Backend\proyectoBackendRzeznik\views" y aunque modificaba el app.set, seguía dirigiendose a la ruta incorrecta sin pasar por src
 app.engine('handlebars', handlebars.engine({
@@ -51,7 +52,7 @@ app.use('/js', express.static(path.join(__dirname, 'client', 'js')))
 app.use(cookieParser('CoderS3cr3tC0d3'))
 
 export const httpServer = app.listen(PORT, ()=>{
-    console.log(`acá en el PORT ${PORT}`)
+    logger.debug(`acá en el PORT ${PORT}`)
 })
 const socketServer = new Server(httpServer)
 
@@ -84,15 +85,16 @@ app.use('/api/tickets', ticketsRouter)
 app.use("/api/email", emailRouter)
 app.use('/mockingproducts', mockingRouter)
 app.use('/chat', chatRouter)
+app.use('/loggerTest', loggerRouter)
 const chatService = new ChatService()
 socketServer.on('connection', async (socket) => {
-    console.log("Nuevo cliente conectado")
+    logger.debug("Nuevo cliente conectado")
     try {
         const messages = await chatService.getAll()
         const reverseMessages = messages.slice().reverse()
         socket.emit('message', reverseMessages)
     } catch (error) {
-        console.error('Error al obtener los mensajes:', error)
+        logger.error('Error al obtener los mensajes:', error)
     }
 })
 
@@ -100,7 +102,7 @@ const mongoInstance = async () => {
     try {
         await MongoSingleton.getInstance()
     } catch (error) {
-        console.error(error)
+        logger.error(error)
     }
 }
 mongoInstance()

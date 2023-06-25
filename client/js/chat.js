@@ -50,7 +50,7 @@ chat.addEventListener('submit',e=>{
             window.location.reload()
         } else {
             return result.json().then((error) => {
-                console.log(error.cause)
+                console.error(error.cause)
                 alert('No se pudo enviar el mensaje: ' + error.message)
             })
         }
