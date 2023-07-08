@@ -14,7 +14,7 @@ router.get('/:cID', getIdDatosController)
 
 router.post('/', postDatosController)
 
-router.post('/:cid/products/:pid', passportCall('login'), authorization('user'), postProductDatosController)
+router.post('/:cid/products/:pid', passportCall('login'), authorization(['user', 'premium']), postProductDatosController)
 
 router.delete('/:cid/products/:pid', deleteProductDatosController)
 

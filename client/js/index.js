@@ -34,7 +34,7 @@ logout.addEventListener('click',e=>{
         method: 'POST',
     }).then((response) => {
     if (response.ok) {
-        window.location.replace('/users/login')
+        window.location.replace('/api/users/login')
     } else {
         console.error('Error al hacer logout')
     }
@@ -57,7 +57,7 @@ function agregarProducto(cartId, productId) {
     .catch(error => console.error(error))
 }
 
-function eliminarProducto(cartId, productId) {
+function quitarProducto(cartId, productId) {
     fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'DELETE' })
     .then((response) => {
         if (response.ok) {
@@ -75,6 +75,17 @@ function comprar(cartId) {
             window.location.replace(`/api/products`)
         } else {
             console.error('Error al generar el ticket')
+        }})
+    .catch(error => console.error(error))
+}
+
+function eliminarProducto(productId) {
+    fetch(`/api/products/${productId}`, { method: 'DELETE' })
+    .then((response) => {
+        if (response.ok) {
+            window.location.replace(`/api/products`)
+        } else {
+            console.error('Error al eliminar el producto')
         }})
     .catch(error => console.error(error))
 }

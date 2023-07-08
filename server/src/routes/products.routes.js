@@ -6,11 +6,6 @@ import ioClient from 'socket.io-client'
 import { deleteDatosController, getDatosController, getIdDatosController, postDatosController, putDatosController } from '../controllers/products.controllers.js'
 import errorHandler from '../services/error/middlewares/index.js'
 
-import ProductService from "../services/db/products.services.js"
-import UserService from "../services/db/users.services.js"
-
-let productService = new ProductService()
-const userService = new UserService()
 const socket = ioClient('http://localhost:8080')
 
 // router.use(errorHandler)
@@ -21,16 +16,16 @@ router.get('/realtimeproducts', async (req, res) => {
     res.render(path.join(__dirname, 'views', 'realTimeProducts'))
 })
 
-router.get('/crear', passportCall('login'), authorization('admin'), async (req, res) => {
+router.get('/crear', passportCall('login'), authorization(['admin', 'premium']), async (req, res) => {
     res.render(path.join(__dirname, 'views', 'crearProducto'))
 })
 
-router.get('/:pid', getIdDatosController)
+router.get('/:pid', passportCall('login'), getIdDatosController)
 
-router.post('/', passportCall('login'), authorization('admin'), postDatosController)
+router.post('/', passportCall('login'), authorization(['admin', 'premium']), postDatosController)
 
-router.put('/:pID', passportCall('login'), authorization('admin'), putDatosController)
+router.put('/:pID', passportCall('login'), authorization(['admin', 'premium']),  putDatosController)
 
-router.delete('/:pID', passportCall('login'), authorization('admin'), deleteDatosController)
+router.delete('/:pID', passportCall('login'), authorization(['admin', 'premium']), deleteDatosController)
 
 export default router

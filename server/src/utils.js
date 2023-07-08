@@ -67,10 +67,11 @@ export const passportCall = (strategy) => {
     }
 }
 
-export const authorization = (role) => {
+export const authorization = (roles) => {
     return async (req, res, next) => {
         if (!req.user) return res.status(401).send("Unauthorized: User not found in JWT")
-        if (req.user.role !== role) {
+        const userRole = req.user.role;
+        if (!roles.includes(userRole)) {
             return res.status(403).send("Forbidden: El usuario no tiene permisos con este rol.")
         }
         next()

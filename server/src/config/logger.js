@@ -67,7 +67,7 @@ export const addLogger = (req, res, next) => {
     next()
 }
 
-let logger;
+let logger
 
 if (config.environment === 'production') {
     logger = prodLogger

@@ -16,7 +16,7 @@
                             <span class="badge bg-primary rounded-pill">{{this.quantity}}</span>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
                                 <button class="btn btn-outline-secondary" onclick="agregarProducto('{{../this._id}}', '{{this.product._id}}')">+</button>
-                                <button class="btn btn-outline-secondary" onclick="eliminarProducto('{{../this._id}}', '{{this.product._id}}')">-</button>
+                                <button class="btn btn-outline-secondary" onclick="quitarProducto('{{../this._id}}', '{{this.product._id}}')">-</button>
                             </div>
                         </li>
                         <li class="list-group-item">{{this.partialAmount}}</li>

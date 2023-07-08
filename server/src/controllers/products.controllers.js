@@ -39,9 +39,10 @@ export const getDatosController = async (req, res) => {
 
 export const getIdDatosController = async (req, res) => {
     try{
-        const productoId = [await productService.getId(req.params.pid)]
-        res.render(path.join(__dirname, 'views', 'products'), {
-            products: productoId
+        const productoId = await productService.getId(req.params.pid)
+        res.render(path.join(__dirname, 'views', 'product'), {
+            product: productoId,
+            user: req.user
         })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })
@@ -51,6 +52,16 @@ export const getIdDatosController = async (req, res) => {
 export const postDatosController = async (req, res) => {
     try{
         let product = req.body
+        let producto = {
+            title: product.title,
+            description: product.description,
+            price: product.price,
+            thumbnail: product.thumbnail,
+            code: product.code,
+            stock: product.stock,
+            category: product.category,
+            owner: req.user.email
+        }
         let title = product.title
         if (!title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock || !product.category) {
             CustomError.createError({
@@ -60,7 +71,7 @@ export const postDatosController = async (req, res) => {
                 code: EErrors.INVALID_TYPES_ERROR
             })
         }
-        const newProduct = await productService.save(product)
+        const newProduct = await productService.save(producto)
         res.status(201).send( { status: "Success", message: `Producto agregado con éxito con ID: ${product.id}`, data: newProduct })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
@@ -71,6 +82,12 @@ export const putDatosController = async (req, res) => {
     try{
         let productId = req.params.pID
         let productUpdated = req.body
+        let product = await productService.getId(productId)
+        if (req.user.email != product.owner) {
+            if(req.user.rol != 'admin'){
+                throw new Error(`Usuario no autorizado`)
+            }
+        }
         const productoActualizado = await productService.update(productId, productUpdated)
         res.send({ status: "Success", message: "Producto actualizado.", data: productoActualizado })
     }catch(error){
@@ -81,6 +98,12 @@ export const putDatosController = async (req, res) => {
 export const deleteDatosController = async (req, res) => {
     try{
         let productId = req.params.pID
+        let product = await productService.getId(productId)
+        if (req.user.email != product.owner) {
+            if(req.user.rol != 'admin'){
+                throw new Error(`Usuario no autorizado`)
+            }
+        }
         await productService.delete(productId)
         return res.status(200).send({ status: "Success", message: "Producto eliminado." })
     }catch(error){

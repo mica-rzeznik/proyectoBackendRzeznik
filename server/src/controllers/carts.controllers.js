@@ -53,6 +53,9 @@ export const postProductDatosController = async (req, res) => {
                 code: EErrors.ROUTING_ERROR
             })
         }
+        if (req.user.email === product.owner) {
+            throw new Error(`Usuario no autorizado`)
+        }
         await cartService.saveProduct(cartId, productId)
         res.status(200).redirect('/api/products')
     }catch(error){

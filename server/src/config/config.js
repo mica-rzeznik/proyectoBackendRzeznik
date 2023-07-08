@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import { Command } from 'commander'
-import logger from './logger.js'
+// import logger from './logger.js'
 
 const program = new Command()
 
@@ -26,3 +26,5 @@ export default {
     gmailAccount: process.env.GMAIL_ACCOUNT,
     gmailAppPassword: process.env.GMAIL_APP_PASSWORD
 }
+// import logger from './logger.js'
+// logger.info("Mode Option: ", program.opts().mode)

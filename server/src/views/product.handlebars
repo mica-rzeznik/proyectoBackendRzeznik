@@ -1,0 +1,26 @@
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    <div>
+        <p>Bienvenid@ {{user.name}}</p>
+        <p>Rol del usuario: {{user.rol}}</p>
+        <button class="btn btn-primary" id="logout">Logout</button>
+        <a href="/api/carts/{{user.cart}}"><button class="btn btn-primary" id="cart">Carrito</button></a>
+        <a href="/chat"><button class="btn btn-primary" id="chat">Chat</button></a>
+        <a href="/api/users"><button class="btn btn-primary" id="profile">Perfil</button></a>
+    </div>
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+            <a href="/api/products/{{product._id}}">
+                <img src="{{product.thumbnail}}" class="card-img-top" alt="imagen del producto" style="width: 200px">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{product.title}}</h5>
+                <p class="card-text">{{product.description}}</p>
+                <h6 class="card-subtitle mb-2 text-muted">{{product.price}} sickles de plata</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Stock disponible: {{product.stock}}</h6>
+                <button class="btn btn-primary" onclick="agregarProducto('{{user.cart}}', '{{product._id}}')">Agregar al carrito</button>
+                <button class="btn btn-outline-secondary" onclick="eliminarProducto('{{product._id}}')">X</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/index.js"></script>

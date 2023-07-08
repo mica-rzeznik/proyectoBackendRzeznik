@@ -1,9 +1,12 @@
 <div class="row row-cols-1 row-cols-md-3 g-4">
     <div>
         <p>Bienvenid@ {{user.name}}</p>
+        <p>Rol del usuario: {{user.rol}}</p>
         <button class="btn btn-primary" id="logout">Logout</button>
         <a href="/api/carts/{{user.cart}}"><button class="btn btn-primary" id="cart">Carrito</button></a>
         <a href="/chat"><button class="btn btn-primary" id="chat">Chat</button></a>
+        <a href="/api/users"><button class="btn btn-primary" id="profile">Perfil</button></a>
+        <a href="/api/products/crear"><button class="btn btn-primary" id="crear">Crear producto</button></a>
     </div>
     {{#each products}}
         <div class="col">

@@ -32,11 +32,13 @@ export const loginController = async (req, res)=>{
             email: user.email,
             age: user.age,
             role: user.role,
-            cart: cart._id
+            cart: cart._id, 
+            id: user._id,
+            rol: user.role
         }
         const access_token = generateJWToken(tokenUser)
         res.cookie('jwtCookieToken', access_token , {
-            maxAge: 1000000,
+            // maxAge: 1000000,
             httpOnly: true
         })
         res.send({message: "Login successful!"})
@@ -88,6 +90,28 @@ export const logoutController = (req, res) => {
     }
 }
 
+export const changePasswordController = async (req, res) => {
+    try{
+        let user = req.user
+        console.log(user)
+        let { newPassword, newPassword2 } = req.body
+        console.log(newPassword)
+        if(newPassword != newPassword2){
+            console.log('contraseñas iguales')
+            return res.status(401).send({status:"error",error:"Las contraseñas no coinciden"})
+        }
+        if(isValidPassword(user, newPassword)){
+            console.log('acá está el problema creo')
+            return res.status(401).send({status:"error",error:"La contraseña nueva no puede ser la misma que la anterior"})
+        }
+        console.log('llegamos acá?')
+        const passwordActualizada = await userService.updatePassword(user, newPassword)
+        res.status(200).send({ status: "Success", message: "Contraseña actualizada.", data: passwordActualizada })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
+    }
+}
+
 export const githubcallbackController =  async (req, res) => {
     // const user = req.user
     // req.session.user= {
@@ -96,4 +120,14 @@ export const githubcallbackController =  async (req, res) => {
     //     age: user.age
     // }
     res.redirect("/github")
+}
+
+export const premiumController = async (req, res) => {
+    try{
+        let userId = req.params.uid
+        await userService.update(userId)
+        res.send('Rol del usuario cambiado')
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
+    }
 }
