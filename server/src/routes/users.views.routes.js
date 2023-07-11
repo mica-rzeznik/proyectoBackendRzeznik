@@ -15,8 +15,11 @@ router.get('/register', (req, res)=>{
     res.render('register')
 })
 
-router.get('/changePassword',passportCall('login'), (req, res)=>{
-    res.render('changePassword')
+router.get('/changePassword', (req, res)=>{
+    const email = req.params.email
+    res.render('changePassword', {
+        email: email
+    })
 })
 
 router.get('/', passportCall('login'),  (req, res)=>{

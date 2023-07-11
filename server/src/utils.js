@@ -38,8 +38,13 @@ export const isValidPassword = (user, password )=>{
 export const PRIVATE_KEY = "CoderhouseBackendCourseSecretKeyJWT"
 
 export const generateJWToken = (user) => {
-    return jwt.sign({user}, PRIVATE_KEY, {expiresIn: '60s'})
+    return jwt.sign({user}, PRIVATE_KEY, {expiresIn: '120s'})
 }
+
+export const generateJWTokenEmail = (email) => {
+    return jwt.sign({ email }, PRIVATE_KEY, { expiresIn: '1h' })
+}
+
 
 export const authToken = (req, res, next) => {
     const authHeader = req.headers.authorization

@@ -83,10 +83,8 @@ export const putDatosController = async (req, res) => {
         let productId = req.params.pID
         let productUpdated = req.body
         let product = await productService.getId(productId)
-        if (req.user.email != product.owner) {
-            if(req.user.rol != 'admin'){
-                throw new Error(`Usuario no autorizado`)
-            }
+        if (req.user.email != product.owner & req.user.rol != 'admin') {
+            throw new Error(`Usuario no autorizado`)
         }
         const productoActualizado = await productService.update(productId, productUpdated)
         res.send({ status: "Success", message: "Producto actualizado.", data: productoActualizado })
@@ -99,10 +97,8 @@ export const deleteDatosController = async (req, res) => {
     try{
         let productId = req.params.pID
         let product = await productService.getId(productId)
-        if (req.user.email != product.owner) {
-            if(req.user.rol != 'admin'){
-                throw new Error(`Usuario no autorizado`)
-            }
+        if (req.user.email != product.owner & req.user.rol != 'admin') {
+            throw new Error(`Usuario no autorizado`)
         }
         await productService.delete(productId)
         return res.status(200).send({ status: "Success", message: "Producto eliminado." })

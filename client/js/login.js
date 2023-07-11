@@ -1,8 +1,9 @@
-const form = document.getElementById('loginForm')
+const loginForm = document.getElementById('loginForm')
+const changePasswordForm = document.getElementById('changePasswordForm')
 
-form.addEventListener('submit',e=>{
+loginForm.addEventListener('submit',e=>{
     e.preventDefault()
-    const data = new FormData(form)
+    const data = new FormData(loginForm)
     const obj = {}
     data.forEach((value,key)=>obj[key]=value)
     fetch('/api/jwt/login',{
@@ -24,4 +25,21 @@ form.addEventListener('submit',e=>{
             alert("Login invalido, revisa los datos de entrada!")
         }
     })
+})
+
+changePasswordForm.addEventListener('submit',e=>{
+    e.preventDefault()
+    const email = changePasswordForm.changePasswordEmail.value
+    fetch(`/api/jwt/changePassword/${email}`, { method: 'POST' })
+    .then((response) => {
+        if (response.status===200) {
+            window.location.reload()
+        } else {
+            response.text().then((errorMessage) => {
+                console.error('Error al restablecer la contraseña:', response.status, response.statusText);
+                console.error('Mensaje de error:', errorMessage);
+            })
+        }
+    })
+    .catch(error => console.error(error))
 })

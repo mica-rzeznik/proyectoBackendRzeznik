@@ -17,17 +17,18 @@ export default class TicketService {
         return result.toObject()
     }
     save = async (cartId, user) => {
-        const userCompleto = await userModel.findOne({email: user.email})
         let ticket = await ticketsModel.create({})
         const cart = await cartModel.findOne({_id: cartId})
+        console.log(cart.products)
         let result = await ticketsModel.findByIdAndUpdate(ticket._id, {
-            purchaser: userCompleto._id,
-            purchaser_name: `${userCompleto.first_name} ${userCompleto.last_name}`,
-            purchaser_email: userCompleto.email,
+            purchaser: user.id,
+            purchaser_name: user.name,
+            purchaser_email: user.email,
             cart: cartId,
-            amount: cart.totalAmount
+            amount: cart.totalAmount,
+            products: cart.products
         })
-        await cartService.deleteCart(cartId)
+        // await cartService.deleteCart(cartId)
         return result
     }
 }

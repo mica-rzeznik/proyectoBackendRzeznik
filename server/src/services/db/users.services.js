@@ -33,13 +33,9 @@ export default class UserService {
             throw new Error('Usuario no era ni premium ni user')
         }
     }
-    updatePassword = async (user, password) => {
-        let email = user.email
-        console.log(email)
+    updatePassword = async (email, password) => {
         const userCompleto = await userModel.findOne({email: email})
-        console.log(userCompleto)
         const userId = userCompleto._id
-        console.log(userId)
         let result = await userModel.findByIdAndUpdate(userId, { password: password })
         return result
     }

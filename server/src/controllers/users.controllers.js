@@ -1,6 +1,4 @@
-import path from "path"
-import { Router } from 'express'
-import __dirname, { createHash, generateJWToken, isValidPassword } from '../utils.js'
+import __dirname, { PRIVATE_KEY, createHash, generateJWToken, generateJWTokenEmail, isValidPassword } from '../utils.js'
 import UserService from '../services/db/users.services.js'
 import CartService from '../services/db/carts.services.js'
 import { cartModel } from '../services/db/models/carts.models.js'
@@ -8,6 +6,8 @@ import userModel from '../services/db/models/users.models.js'
 import CustomError from "../services/error/CustomError.js"
 import EErrors from "../services/error/errors-enum.js"
 import { createUserErrorInfo } from '../services/error/messages/user-creation-error.message.js'
+import { passwordEmail } from './email.controllers.js'
+import jwt from 'jsonwebtoken'
 
 const userService = new UserService()
 const cartService = new CartService()
@@ -22,7 +22,7 @@ export const loginController = async (req, res)=>{
         if(!isValidPassword(user, password)){
             return res.status(401).send({status:"error",error:"El usuario y la contraseña no coinciden!"})
         }
-        const cartAnterior = await cartModel.findOne({_id: user.cart})
+        const cartAnterior = await cartService.getId(user.cart)
         const cart = cartAnterior || await cartService.save({})
         await userModel.findByIdAndUpdate(user._id, {
             cart: cart._id,
@@ -90,23 +90,45 @@ export const logoutController = (req, res) => {
     }
 }
 
+export const changePasswordEmailController = async (req, res) => {
+    try{
+        let email = req.params.email
+        const token = generateJWTokenEmail(email)
+        const resetPasswordLink = `http://localhost:8080/api/users/changePassword?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
+        passwordEmail(req, res, email, resetPasswordLink)
+        res.status(200).send({ message: "Success!" })
+    } catch (error) {
+        res.status(500).send({ error: error.message })
+    }
+}
+
 export const changePasswordController = async (req, res) => {
     try{
-        let user = req.user
-        console.log(user)
-        let { newPassword, newPassword2 } = req.body
-        console.log(newPassword)
-        if(newPassword != newPassword2){
-            console.log('contraseñas iguales')
-            return res.status(401).send({status:"error",error:"Las contraseñas no coinciden"})
+        const email = req.query.email
+        const token = req.query.token
+        console.log(token)
+        if (!token) {
+            return res.status(401).send({ status: 'error', error: 'Enlace vencido. Envíe el mail de restablecimiento nuevamente.' })
         }
-        if(isValidPassword(user, newPassword)){
-            console.log('acá está el problema creo')
-            return res.status(401).send({status:"error",error:"La contraseña nueva no puede ser la misma que la anterior"})
+        try {
+            const decoded = jwt.verify(token, PRIVATE_KEY)
+            const emailFromToken = decoded.email
+            if (emailFromToken !== email) {
+                return res.status(401).send({ status: 'error', error: 'El email en el token no coincide con el email proporcionado.' })
+            }
+            let { newPassword, newPassword2 } = req.body
+            if(newPassword != newPassword2){
+                return res.status(401).send({status:"error", error:"Las contraseñas no coinciden"})
+            }
+            const user = await userService.findByUsername(email)
+            if(isValidPassword(user, newPassword)){
+                return res.status(401).send({status:"error", error:"La contraseña nueva no puede ser la misma que la anterior"})
+            }
+            const passwordActualizada = await userService.updatePassword(email, createHash(newPassword))
+            res.status(200).send({ status: 'Success', message: 'Contraseña actualizada.' })
+        } catch (error) {
+            return res.status(401).send({ status: 'error', error: 'Token de autenticación inválido.' })
         }
-        console.log('llegamos acá?')
-        const passwordActualizada = await userService.updatePassword(user, newPassword)
-        res.status(200).send({ status: "Success", message: "Contraseña actualizada.", data: passwordActualizada })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }

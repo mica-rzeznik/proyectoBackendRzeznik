@@ -43,8 +43,8 @@ export const postProductDatosController = async (req, res) => {
     try{
         const cartId = req.params.cid
         const productId = req.params.pid
-        const cart = await cartModel.findOne({_id: cartId})
-        const product = await productModel.findOne({_id: productId})
+        const cart = await cartService.getId(cartId)
+        const product = await productService.getId(productId)
         if (!product || !cart) {
             CustomError.createError({
                 name: "Add Product to Cart Error",

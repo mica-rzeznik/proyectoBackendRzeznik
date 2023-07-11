@@ -12,5 +12,25 @@
     </form>
     <p>¿No estás registrado? <a href="/api/users/register">Regístrate aquí</a></p>
     <p>¿Tenés cuenta de Github? <a href="/github/login">Logeate por Github</a></p>
+    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">¿Olvidaste tu contraseña?</button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ingrese su email</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Email:</label>
+                            <input type="email" class="form-control" id="recipient-name" name="changePasswordEmail" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline-info">Enviar link de restablecimiento de contraseña</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="/js/login.js"></script>

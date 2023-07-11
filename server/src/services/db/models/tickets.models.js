@@ -1,8 +1,8 @@
-import moongose from 'mongoose'
+import mongoose from 'mongoose'
 
 const collection = 'tickets'
 
-const schema = new moongose.Schema({
+const schema = new mongoose.Schema({
     code: {
         type: String,
         unique: true,
@@ -14,7 +14,7 @@ const schema = new moongose.Schema({
         default: Date.now,
     },
     purchaser: {
-        type: moongose.SchemaTypes.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'users'
     },
     purchaser_name: {
@@ -24,18 +24,37 @@ const schema = new moongose.Schema({
         type: String
     },
     cart: {
-        type: moongose.SchemaTypes.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'carts'
+    },
+    products: {
+        type: [
+            {
+                product:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "products"
+                },
+                quantity: {
+                    type: Number,
+                    default: 1
+                },
+                partialAmount: {
+                    type: Number,
+                    default: 0
+                }
+            }
+        ],
+        default: []
     },
     amount: Number
 })
 
-// schema.pre('findOne', function() {
-//     this.populate('users.users carts.carts')
-// })
-// schema.pre('find', function (){
-//     this.populate('users.users carts.carts')
-// })
+schema.pre('findOne', function (){
+    this.populate("products.product")
+})
+schema.pre('find', function (){
+    this.populate("products.product")
+})
 
-const ticketsModel = moongose.model(collection, schema)
+const ticketsModel = mongoose.model(collection, schema)
 export default ticketsModel
