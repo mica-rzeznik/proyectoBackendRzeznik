@@ -1,13 +1,12 @@
 import __dirname, { PRIVATE_KEY, createHash, generateJWToken, generateJWTokenEmail, isValidPassword } from '../utils.js'
 import UserService from '../services/db/users.services.js'
 import CartService from '../services/db/carts.services.js'
-import { cartModel } from '../services/db/models/carts.models.js'
-import userModel from '../services/db/models/users.models.js'
 import CustomError from "../services/error/CustomError.js"
 import EErrors from "../services/error/errors-enum.js"
 import { createUserErrorInfo } from '../services/error/messages/user-creation-error.message.js'
 import { passwordEmail } from './email.controllers.js'
 import jwt from 'jsonwebtoken'
+import { cartModel } from '../services/db/models/carts.models.js'
 
 const userService = new UserService()
 const cartService = new CartService()
@@ -24,7 +23,7 @@ export const loginController = async (req, res)=>{
         }
         const cartAnterior = await cartService.getId(user.cart)
         const cart = cartAnterior || await cartService.save({})
-        await userModel.findByIdAndUpdate(user._id, {
+        await userService.update(user._id, {
             cart: cart._id,
         })
         const tokenUser = {
@@ -65,7 +64,7 @@ export const registerController = async (req, res)=>{
             return res.status(401).send({status: "error", message: "Usuario ya existe."})
         }
         let user = await userService.save({})
-        let result = await userModel.findByIdAndUpdate(user._id, {
+        let result = await userService.update(user._id, {
             first_name,
             last_name,
             email,
@@ -147,7 +146,8 @@ export const githubcallbackController =  async (req, res) => {
 export const premiumController = async (req, res) => {
     try{
         let userId = req.params.uid
-        await userService.update(userId)
+        await userService.updateRol(userId)
+        req.logger.warning(`Rol del usuario con id: ${userId} cambiado`)
         res.send('Rol del usuario cambiado')
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })

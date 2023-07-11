@@ -18,7 +18,11 @@ export default class UserService {
         const result = await userModel.findById(id)
         return result
     }
-    update = async (id) => {
+    update = async (id, parameter) => {
+        const result = await userModel.findByIdAndUpdate(id, parameter)
+        return result
+    }
+    updateRol = async (id) => {
         const user = await userModel.findById(id)
         if(user.role == 'premium'){
             const result = await userModel.findByIdAndUpdate(id, {role: 'user'})

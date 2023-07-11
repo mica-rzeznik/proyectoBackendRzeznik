@@ -5,8 +5,6 @@ import ProductService from "../services/db/products.services.js"
 import CustomError from "../services/error/CustomError.js"
 import { addProductErrorInfo } from "../services/error/messages/productoCarrito-error.message.js"
 import EErrors from "../services/error/errors-enum.js"
-import { productModel } from "../services/db/models/products.models.js"
-import { cartModel } from "../services/db/models/carts.models.js"
 
 let cartService = new CartService()
 let productService = new ProductService()
@@ -23,7 +21,7 @@ export const getDatosController = async (req, res) => {
 }
 export const getIdDatosController = async (req, res) => {
     try{
-        const cartId = [await cartService.getId(req.params.cID)]
+        const cartId = [await cartService.getIdObject(req.params.cID)]
         res.render(path.join(__dirname, 'views', 'cart'), {
             cart: cartId
         })
@@ -43,7 +41,7 @@ export const postProductDatosController = async (req, res) => {
     try{
         const cartId = req.params.cid
         const productId = req.params.pid
-        const cart = await cartService.getId(cartId)
+        const cart = await cartService.getIdObject(cartId)
         const product = await productService.getId(productId)
         if (!product || !cart) {
             CustomError.createError({

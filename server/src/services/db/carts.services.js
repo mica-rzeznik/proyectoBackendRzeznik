@@ -12,9 +12,13 @@ export default class CartService {
         const newCart = await cartModel.create({})
         return newCart
     }
-    getId = async (id) => {
+    getIdObject = async (id) => {
         let carrito = await cartModel.findById(id)
         return carrito.toObject()
+    }
+    getId = async (id) => {
+        let carrito = await cartModel.findById(id)
+        return carrito
     }
     saveProduct = async (cartId, productId) => {
         const cart = await cartModel.findOne({_id: cartId}).populate("products")

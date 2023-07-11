@@ -28,7 +28,7 @@ export default class TicketService {
             amount: cart.totalAmount,
             products: cart.products
         })
-        // await cartService.deleteCart(cartId)
+        await cartService.deleteCart(cartId)
         return result
     }
 }
