@@ -1,7 +1,6 @@
 const form = document.getElementById('changeForm')
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
-const email = urlParams.get('email')
 const token = urlParams.get('token')
 
 form.addEventListener('submit',e=>{
@@ -9,7 +8,7 @@ form.addEventListener('submit',e=>{
     const data = new FormData(form)
     const obj = {}
     data.forEach((value,key)=>obj[key]=value)
-    fetch(`/api/jwt/changePassword?email=${email}&token=${token}`,{
+    fetch(`/api/jwt/changePassword?token=${token}`,{
         method:'PUT',
         body:JSON.stringify(obj),
         headers:{

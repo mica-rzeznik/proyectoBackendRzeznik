@@ -7,6 +7,7 @@ import { createUserErrorInfo } from '../services/error/messages/user-creation-er
 import { passwordEmail } from './email.controllers.js'
 import jwt from 'jsonwebtoken'
 import { cartModel } from '../services/db/models/carts.models.js'
+import config from '../config/config.js'
 
 const userService = new UserService()
 const cartService = new CartService()
@@ -93,7 +94,7 @@ export const changePasswordEmailController = async (req, res) => {
     try{
         let email = req.params.email
         const token = generateJWTokenEmail(email)
-        const resetPasswordLink = `http://localhost:8080/api/users/changePassword?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
+        const resetPasswordLink = `http://localhost:${config.port}/api/users/changePassword?token=${encodeURIComponent(token)}`
         passwordEmail(req, res, email, resetPasswordLink)
         res.status(200).send({ message: "Success!" })
     } catch (error) {
@@ -103,7 +104,6 @@ export const changePasswordEmailController = async (req, res) => {
 
 export const changePasswordController = async (req, res) => {
     try{
-        const email = req.query.email
         const token = req.query.token
         console.log(token)
         if (!token) {
@@ -112,18 +112,15 @@ export const changePasswordController = async (req, res) => {
         try {
             const decoded = jwt.verify(token, PRIVATE_KEY)
             const emailFromToken = decoded.email
-            if (emailFromToken !== email) {
-                return res.status(401).send({ status: 'error', error: 'El email en el token no coincide con el email proporcionado.' })
-            }
             let { newPassword, newPassword2 } = req.body
             if(newPassword != newPassword2){
                 return res.status(401).send({status:"error", error:"Las contraseñas no coinciden"})
             }
-            const user = await userService.findByUsername(email)
+            const user = await userService.findByUsername(emailFromToken)
             if(isValidPassword(user, newPassword)){
                 return res.status(401).send({status:"error", error:"La contraseña nueva no puede ser la misma que la anterior"})
             }
-            const passwordActualizada = await userService.updatePassword(email, createHash(newPassword))
+            const passwordActualizada = await userService.updatePassword(emailFromToken, createHash(newPassword))
             res.status(200).send({ status: 'Success', message: 'Contraseña actualizada.' })
         } catch (error) {
             return res.status(401).send({ status: 'error', error: 'Token de autenticación inválido.' })
