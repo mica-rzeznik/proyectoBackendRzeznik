@@ -1,0 +1,23 @@
+paths:
+  /api/products/:
+    post:
+      summary: Agrega un producto nuevo
+      tags: 
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/requestBodies/newProduct'
+      responses:
+        "201":
+          description: El producto se agregó exitosamente a la base de datos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/product'
+        "500":
+          description: Error interno del servidor.

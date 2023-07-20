@@ -1,0 +1,46 @@
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id autogenerado del producto, es único
+        title:
+          type: string
+          description: nombre del producto, es único
+        description: 
+          type: string
+          description: descripción del producto, es único
+        price: 
+          type: number
+          description: precio del producto
+        status:
+          type: boolean
+          description: status del producto, puede ser true o false
+        thumbnail:
+          type: string
+          description: link a la imagen del producto
+        code:
+          type: string
+          description: código del producto, es único
+        stock:
+          type: number
+          description: stock del producto
+        category:
+          type: string
+          description: categoría del producto
+        owner:
+          type: string
+          description: email del dueño del producto, es un usuario premium o por default, admin. Linkeado a la db de users
+      example:
+        _id: 64a99cccc1d6db8e118a34e3
+        title: "Ranas de chocolate"
+        description: "Incluye una tarjeta coleccionable de alguna bruja o algún mago famoso.…"
+        price: 6
+        status: true
+        thumbnail: "https://i.imgur.com/pK1pjfK.jpeg"
+        code: "rc"
+        stock: 21
+        category: "chocolate"
+        owner: "mica.rzeznik@gmail.com"

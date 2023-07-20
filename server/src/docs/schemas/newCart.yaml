@@ -1,0 +1,17 @@
+components:
+  requestBodies:
+    newCart:
+      type: object
+      required:
+        - products
+        - totalAmount
+      properties:
+        products:
+          type: array
+          description: cada uno de los productos agregados al carrito
+        totalAmount:
+          type: number
+          description: Precio total a pagar (sumatoria de todas las partialAmount)
+      example:
+        totalAmount: 0
+        products: []

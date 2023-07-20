@@ -1,0 +1,41 @@
+components:
+  schemas:
+    cart:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: id autogenerado del carrito, es único
+        products:
+          type: array
+          description: cada uno de los productos agregados al carrito
+          items: 
+            type: object
+            properties:
+              _id:
+                type: objectId
+                description: id autogenerado del tipo de producto agregado, del item, es único. En cada carrito puede ser diferente aunque sea el mismo producto.
+              product:
+                type: objectId
+                description: id con el que el producto aparece en la db de products, es único. Identifica al tipo de producto, es igual en todos lados
+              quantity:
+                type: number
+                description: cantidad agregada del producto al carrito
+              partialAmount:
+                type: number
+                description: es el precio del producto multiplicado por la cantidad
+        totalAmount:
+          type: number
+          description: Precio total a pagar (sumatoria de todas las partialAmount)
+      example:
+        _id: 64add277c3707455a9a160d4
+        totalAmount: 5
+        products:
+          - _id: 64b8976383a1ce75a1cb1815
+            product: 64a99e23e1ea54cea9a35112
+            quantity: 1
+            partialAmount: 3
+          - _id: 64b897d483a1ce75a1cb182c
+            product: 64a99e3ae1ea54cea9a35116
+            quantity: 2
+            partialAmount: 2

@@ -25,11 +25,28 @@ import MongoSingleton from './config/mongodb-singleton.js'
 import compression from 'express-compression'
 import ChatService from './services/db/chats.services.js'
 import logger, { addLogger } from './config/logger.js'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUIExpress from 'swagger-ui-express'
 
 const app = express()
 const PORT = config.port
 const DB = config.mongoUrl
 logger.debug(config)
+
+const swaggerOptions ={
+    definition:{
+        openapi: '3.0.0',
+        info:{
+            title:'Documentación',
+            description:'Comprar y vender golosinas mágicas'
+        }
+    },
+    apis:[`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/api/docs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs))
+
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(addLogger)
