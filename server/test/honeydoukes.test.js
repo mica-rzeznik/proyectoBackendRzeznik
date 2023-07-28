@@ -106,21 +106,23 @@ describe("Testing Honeydukes App", () => {
             expect(this.cart._id).is.ok
         })
         it("Agregar productos al carrito correctamente", async function () {
-            // this.timeout(10000)
             //Given
-            await requester.post(`/api/carts/${this.cart._id}/products/${this.productID}`)
-            // //Then
-            // const cartService = new CartService()
-            // const cart = await this.cartService.getId(this.cart._id)
-            // console.log(cart)
-            // done()
-            console.log(this.cart._id)
-            console.log(this.productID)
-        
-            // console.log(_body.message)
-            // this._id = _body.data._id
+            const emptyArray = []
+            //Then
+            const result = await requester.post(`/api/carts/${this.cart._id}/products/${this.productID}`)
+            this.cart = result._body.data
             //Assert that
-            // expect(this.cart._id).is.ok
+            expect(this.cart.products).is.not.deep.equal(emptyArray)
+        })
+        it("Al agregar más productos al carrito se debe aumentar el precio total", async function () {
+            //Given
+            const precioInicial = this.cart.totalAmount
+            //Then
+            const result = await requester.post(`/api/carts/${this.cart._id}/products/${this.productID}`)
+            this.cart = result._body.data
+            console.log(`Total anterior: ${precioInicial}, total actual: ${this.cart.totalAmount}`)
+            //Assert that
+            expect(this.cart.totalAmount).is.not.equal(precioInicial)
         })
     })
 })

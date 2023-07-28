@@ -62,8 +62,8 @@ export const postProductDatosController = async (req, res) => {
         // if (req.user.email === product.owner) {
         //     throw new Error(`Usuario no autorizado`)
         // }
-        await cartService.saveProduct(cartId, productId)
-        res.status(200)/*.redirect('/api/products')*/
+        const newCart = await cartService.saveProduct(cartId, productId)
+        res.status(200).send( { status: "Success", message: "Producto agregado al carrito exitosamente" , data: newCart })/*.redirect('/api/products')*/
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
