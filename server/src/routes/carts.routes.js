@@ -7,11 +7,11 @@ import { deleteDatosController, deleteProductDatosController, getDatosController
 
 router.get('/', passportCall('login'), getDatosController)
 
-router.get('/:cID', passportCall('login'), getIdDatosController)
+router.get('/:cID', /*passportCall('login'),*/ getIdDatosController)
 
 router.post('/', postDatosController)
 
-router.post('/:cid/products/:pid', passportCall('login'), authorization(['user', 'premium']), postProductDatosController)
+router.post('/:cid/products/:pid', /*passportCall('login'), authorization(['user', 'premium']),*/ postProductDatosController)
 
 router.delete('/:cid/products/:pid', deleteProductDatosController)
 

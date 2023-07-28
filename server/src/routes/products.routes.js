@@ -20,12 +20,12 @@ router.get('/crear', passportCall('login'), authorization(['admin', 'premium']),
     res.render(path.join(__dirname, 'views', 'crearProducto'))
 })
 
-router.get('/:pid', passportCall('login'), getIdDatosController)
+router.get('/:pid', /*passportCall('login'),*/ getIdDatosController)
 
-router.post('/', passportCall('login'), authorization(['admin', 'premium']), postDatosController)
+router.post('/', /*passportCall('login'), authorization(['admin', 'premium']),*/ postDatosController)
 
 router.put('/:pID', passportCall('login'), authorization(['admin', 'premium']),  putDatosController)
 
-router.delete('/:pID', passportCall('login'), authorization(['admin', 'premium']), deleteDatosController)
+router.delete('/:pID', /*passportCall('login'), authorization(['admin', 'premium']),*/ deleteDatosController)
 
 export default router

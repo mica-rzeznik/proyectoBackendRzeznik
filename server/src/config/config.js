@@ -15,7 +15,7 @@ console.log("Mode Option: ", program.opts().mode)
 const environment = program.opts().mode
 
 dotenv.config({
-    path: environment === "production" ? "./server/src/config/.env.production" : "./server/src/config/.env.development"
+    path: `./server/src/config/.env.${environment}`
 })
 
 export default {
