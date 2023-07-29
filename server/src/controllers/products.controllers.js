@@ -59,8 +59,8 @@ export const postDatosController = async (req, res) => {
             thumbnail: product.thumbnail,
             code: product.code,
             stock: product.stock,
-            category: product.category
-            // owner: req.user.email
+            category: product.category,
+            owner: req.user.email
         }
         let title = product.title
         if (!title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock || !product.category) {
@@ -97,9 +97,9 @@ export const deleteDatosController = async (req, res) => {
     try{
         let productId = req.params.pID
         let product = await productService.getId(productId)
-        // if (req.user.email != product.owner & req.user.rol != 'admin') {
-        //     throw new Error(`Usuario no autorizado`)
-        // }
+        if (req.user.email != product.owner & req.user.rol != 'admin') {
+            throw new Error(`Usuario no autorizado`)
+        }
         await productService.delete(productId)
         return res.status(200).send({ status: "Success", message: "Producto eliminado." })
     }catch(error){

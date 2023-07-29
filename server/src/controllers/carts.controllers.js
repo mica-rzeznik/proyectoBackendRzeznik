@@ -29,14 +29,6 @@ export const getIdDatosController = async (req, res) => {
         res.status(500).send({ status: "Error", message: error.message })
     }
 }
-export const getIdSinRenderizar = async (req, res) => {
-    try{
-        const cartId = [await cartService.getIdObject(req.params.cID)]
-        res.send(cartId)
-    }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
-    }
-}
 export const postDatosController = async (req, res) => {
     try{
         const newCart = await cartService.save()
@@ -59,9 +51,9 @@ export const postProductDatosController = async (req, res) => {
                 code: EErrors.ROUTING_ERROR
             })
         }
-        // if (req.user.email === product.owner) {
-        //     throw new Error(`Usuario no autorizado`)
-        // }
+        if (req.user.email === product.owner) {
+            throw new Error(`Usuario no autorizado`)
+        }
         const newCart = await cartService.saveProduct(cartId, productId)
         res.status(200).send( { status: "Success", message: "Producto agregado al carrito exitosamente" , data: newCart })/*.redirect('/api/products')*/
     }catch(error){

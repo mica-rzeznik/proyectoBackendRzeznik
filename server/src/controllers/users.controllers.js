@@ -64,18 +64,28 @@ export const registerController = async (req, res)=>{
         if (exists){
             return res.status(401).send({status: "error", message: "Usuario ya existe."})
         }
-        let user = await userService.save({})
-        let result = await userService.update(user._id, {
-            first_name,
-            last_name,
-            email,
-            age,
+        // let user = await userService.save({})
+        // let result = await userService.update(user._id, {
+        //     first_name,
+        //     last_name,
+        //     email,
+        //     age,
+        //     password: createHash(password),
+        //     role,
+        //     cart: cart._id,
+        //     loggedBy: 'Registrado tradicionalmente'
+        // })
+        let result = await userService.save({
+            first_name: first_name,
+            last_name: last_name,
+            email: email,
+            age: age,
             password: createHash(password),
-            role,
+            role: role,
             cart: cart._id,
             loggedBy: 'Registrado tradicionalmente'
         })
-        res.status(201).send({status: "success", message: "Usuario creado con extito con ID: " + result.id})
+        res.status(201).send({status: "success", message: "Usuario creado con éxito con ID: " + result.id, data: result})
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
