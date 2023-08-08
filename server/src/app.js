@@ -31,7 +31,6 @@ import swaggerUIExpress from 'swagger-ui-express'
 const app = express()
 const PORT = config.port
 const DB = config.mongoUrl
-logger.debug(config)
 
 const swaggerOptions ={
     definition:{

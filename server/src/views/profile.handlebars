@@ -4,5 +4,24 @@
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
     <button class="btn btn-outline-secondary" onclick="cambiarRol('{{user.id}}')">Cambiar rol</button>
+    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Subir archivo</button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Seleccione su archivo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3 needs-validation" id="uploadForm" name="{{user.id}}">
+                        <div class="mb-3">
+                            <input class="form-control" name="uploadFile" type="file" required>
+                        </div>
+                        <input type="submit" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<script src="/js/rol.js"></script>
+<script src="/js/profile.js"></script>

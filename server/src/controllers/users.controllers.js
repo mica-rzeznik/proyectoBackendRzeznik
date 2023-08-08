@@ -6,7 +6,6 @@ import EErrors from "../services/error/errors-enum.js"
 import { createUserErrorInfo } from '../services/error/messages/user-creation-error.message.js'
 import { passwordEmail } from './email.controllers.js'
 import jwt from 'jsonwebtoken'
-import { cartModel } from '../services/db/models/carts.models.js'
 import config from '../config/config.js'
 
 const userService = new UserService()
@@ -26,6 +25,9 @@ export const loginController = async (req, res)=>{
         const cart = cartAnterior || await cartService.save({})
         await userService.update(user._id, {
             cart: cart._id,
+        })
+        await userService.update(user._id, {
+            last_connection: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
         })
         const tokenUser = {
             name: `${user.first_name} ${user.last_name}`,
@@ -64,17 +66,6 @@ export const registerController = async (req, res)=>{
         if (exists){
             return res.status(401).send({status: "error", message: "Usuario ya existe."})
         }
-        // let user = await userService.save({})
-        // let result = await userService.update(user._id, {
-        //     first_name,
-        //     last_name,
-        //     email,
-        //     age,
-        //     password: createHash(password),
-        //     role,
-        //     cart: cart._id,
-        //     loggedBy: 'Registrado tradicionalmente'
-        // })
         let result = await userService.save({
             first_name: first_name,
             last_name: last_name,
@@ -156,6 +147,17 @@ export const premiumController = async (req, res) => {
         await userService.updateRol(userId)
         req.logger.warning(`Rol del usuario con id: ${userId} cambiado`)
         res.send('Rol del usuario cambiado')
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
+    }
+}
+
+export const userDocuments = async (req, res) => {
+    try{
+        let userId = req.params.userId
+        console.log('archivo subido:')
+        console.log(req.file)
+        res.status(200).send({ status: 'Success', message: 'Documento agregado' })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }

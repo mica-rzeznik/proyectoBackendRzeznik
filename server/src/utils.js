@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import { faker } from '@faker-js/faker'
+import multer from 'multer'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -90,3 +91,15 @@ export const cookieExtractor = req =>{
     }
     return token
 }
+
+const storage = multer.diskStorage({
+    destination: function(req,file,cb){
+        console.log(`acá desde el middleware: ${file}`)
+        cb(null,__dirname+'/public/img')
+    },
+    filename: function(req,file,cb){
+        cb(null,file.originalname)
+    }
+})
+
+export const uploader = multer({storage})

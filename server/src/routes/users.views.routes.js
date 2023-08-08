@@ -30,14 +30,6 @@ router.get('/', passportCall('login'),  (req, res)=>{
 // usuario admin: adminCoder@coder.com
 // contraseña: adminCod3r123
 
-function auth(req, res, next){
-    if(req.user.role=="admin"){
-        return next()
-    }else{
-        return res.status(403).render("error", {error:'Usuario no autorizado para ingresar al recurso'})
-    }
-}
-
 router.get('/private', passportCall('login'), authorization(['admin']),  (req, res)=>{
     res.send("Esto solo lo ve el admin")
 })

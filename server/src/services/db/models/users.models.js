@@ -14,6 +14,12 @@ const stringTypeSchemaNonUniqueRequired = {
     required: true
 }
 
+const stringTypeSchemaNonUniqueNonRequired = {
+    type: String,
+    unique: false,
+    required: false
+}
+
 const numberTypeSchemaNonUniqueRequired = {
     type: Number,
     unique: false,
@@ -37,6 +43,20 @@ const schema = mongoose.Schema({
         ref: 'carts',
         unique: true,
         required: true
+    }, 
+    last_connection: stringTypeSchemaNonUniqueNonRequired,
+    documents: {
+        type: [
+            {
+                name:{
+                    type: String
+                },
+                reference: {
+                    type: String
+                }
+            }
+        ],
+        default: []
     }
 })
 
