@@ -94,11 +94,16 @@ export const cookieExtractor = req =>{
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
-        console.log(`acá desde el middleware: ${file}`)
-        cb(null,__dirname+'/public/img')
+        if (file.fieldname.startsWith('profile-pic')) {
+            cb(null, `${__dirname}/public/profiles`)
+        } else if (file.fieldname.startsWith('product-pic')) {
+            cb(null, `${__dirname}/public/products`)
+        } else {
+            cb(null, `${__dirname}/public/documents`)
+        }
     },
     filename: function(req,file,cb){
-        cb(null,file.originalname)
+        cb(null,`${Date.now()}-${file.originalname}`)
     }
 })
 

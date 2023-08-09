@@ -43,4 +43,8 @@ export default class UserService {
         let result = await userModel.findByIdAndUpdate(userId, { password: password })
         return result
     }
+    uploadDocuments = async (files, userId) => {
+        const user = await userModel.findByIdAndUpdate(userId, { documents: files})
+        return user
+    }
 }

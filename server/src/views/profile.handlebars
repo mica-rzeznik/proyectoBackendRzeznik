@@ -3,7 +3,7 @@
     <p>Nombre: {{user.name}}</p>
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
-    <button class="btn btn-outline-secondary" onclick="cambiarRol('{{user.id}}')">Cambiar rol</button>
+    {{!-- <button class="btn btn-outline-secondary" onclick="cambiarRol('{{user.id}}')">Cambiar rol</button> --}}
     <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Subir archivo</button>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -15,7 +15,16 @@
                 <div class="modal-body">
                     <form class="row g-3 needs-validation" id="uploadForm" name="{{user.id}}">
                         <div class="mb-3">
-                            <input class="form-control" name="uploadFile" type="file" required>
+                            <label for="identificación">Suba su identificación</label>
+                            <input class="form-control" name="identificación" type="file" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="domicilio">Cargue aquí su comprobante de domicilio</label>
+                            <input class="form-control" name="domicilio" type="file" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cuenta">Cargue su comprobante de estado de cuenta aquí</label>
+                            <input class="form-control" name="cuenta" type="file" required>
                         </div>
                         <input type="submit" class="btn btn-success">
                     </form>

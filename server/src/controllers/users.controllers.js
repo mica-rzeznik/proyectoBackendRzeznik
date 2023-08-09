@@ -154,10 +154,14 @@ export const premiumController = async (req, res) => {
 
 export const userDocuments = async (req, res) => {
     try{
-        let userId = req.params.userId
-        console.log('archivo subido:')
-        console.log(req.file)
-        res.status(200).send({ status: 'Success', message: 'Documento agregado' })
+        let userId = req.params.uid
+        let files = []
+        req.files.forEach( file => {
+            let doc = { name: file.originalname, reference: file.path }
+            files.push(doc)
+        })
+        let upload = await userService.uploadDocuments(files, userId)
+        res.status(200).send({ status: 'Success', message: 'Documentos agregados', payload: upload })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
