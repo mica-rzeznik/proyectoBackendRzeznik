@@ -5,8 +5,10 @@ import UsersDto from "../services/dto/user.dto.js"
 import CustomError from "../services/error/CustomError.js"
 import { generateProductErrorInfo } from "../services/error/messages/product-creation-error.message.js"
 import EErrors from "../services/error/errors-enum.js"
+import UserService from "../services/db/users.services.js"
 
 const productService = new ProductService()
+const userService = new UserService()
 
 export const getDatosController = async (req, res) => {
     try{
@@ -18,6 +20,7 @@ export const getDatosController = async (req, res) => {
         const prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : ''
         const nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : ''
         const products = result.docs
+        const userId = (await userService.findByUsername(req.user.email))._id
         res.render(path.join(__dirname, 'views', 'products'), {
             products: products,
             page: result.page,
@@ -30,7 +33,8 @@ export const getDatosController = async (req, res) => {
             nextLink: nextLink,
             isValid: result.isValid,
             currentPage: page,
-            user: req.user
+            user: req.user,
+            userId: userId
         })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })
@@ -40,9 +44,11 @@ export const getDatosController = async (req, res) => {
 export const getIdDatosController = async (req, res) => {
     try{
         const productoId = await productService.getId(req.params.pid)
+        const userId = (await userService.findByUsername(req.user.email))._id
         res.render(path.join(__dirname, 'views', 'product'), {
             product: productoId,
-            user: req.user
+            user: req.user,
+            userId: userId
         })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message })

@@ -1,0 +1,19 @@
+<div class="row row-cols-1 row-cols-md-3 g-4 mx-3 mt-3" >
+    <div>
+        <button class="btn btn-outline-danger" onclick="eliminarUsers()">Eliminar usuarios inactivos</button>
+    </div>
+    {{#each users}}
+        <div class="col card mb-3 mx-3" style="width: 18rem;">
+            <div class="card-body">
+                <p>Nombre:</p>
+                <h1>{{this.name}}</h1>
+                <p>Email: {{this.email}}</p>
+                <p>Edad: {{this.age}}</p>
+                <p>Rol: {{this.rol}}</p>
+                <button class="btn btn-outline-secondary" onclick="cambiarRol('{{this.id}}')">Cambiar rol</button>
+                <button class="btn btn-outline-danger" onclick="eliminarUser('{{this.id}}')">Eliminar</button>
+            </div>
+        </div>
+    {{/each}}
+</div>
+<script src="/js/profile.js"></script>

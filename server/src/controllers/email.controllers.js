@@ -82,3 +82,28 @@ export const passwordEmail = (req, res, email, resetPasswordLink) => {
         res.status(500).send({ error: error.message, message: "No se pudo enviar el email desde:" + config.gmailAccount })
     }
 }
+
+export const deleteUserEmail = (req, res, user) => {
+    try {
+        let mailOptions = {
+            from: "Honeydukes" + config.gmailAccount,
+            to: user.email,
+            subject: "Eliminación cuenta inactiva - Honeydukes",
+            html: `<div>
+                        <h1>Aviso de eliminación de cuenta por inactividad</h1>
+                        <p>${user.first_name} ${user.last_name}, debido a inactividad en su cuenta de honeydukes por 2 días, se procederá a eliminar la misma. Si desea volver a abrirla, deberá registrarse nuevamente.</p>
+                        <a href='http://localhost:${config.port}/api/users/register' >Haga click aquí para registrarse nuevamente</a>
+                    </div>`,
+            attachments: []
+        }
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                res.status(400).send({ message: "Error", payload: error.message })
+            } else {
+                res.status(200).send({ message: "Success", payload: info })
+            }
+        })
+    } catch (error) {
+        res.status(500).send({ error: error.message, message: "No se pudo enviar el email desde:" + config.gmailAccount })
+    }
+}

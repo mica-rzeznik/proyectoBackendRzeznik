@@ -23,23 +23,28 @@ const initializePassport = ()=>{
         async (accessToken, refreshToken, profile, done) => {
             try {
                 const user = await userService.findByUsername(profile._json.email)
-                if(!user.cart){
-                    const cart = await cartService.save({})
-                }
                 if (!user) {
+                    const cart = await cartService.save({})
+                    console.log(profile._json)
                     let newUser = {
                         first_name: profile._json.name,
-                        last_name: '',
+                        last_name: '1',
                         age: 18,
-                        email: profile._json.email,
-                        password: '',
+                        email: profile._json.email || '1',
+                        password: '1',
                         role: 'user',
                         loggedBy: "GitHub",
-                        cart: user.cart || cart
+                        cart: cart,
+                        last_connection: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`
                     }
                     const result = await userService.save(newUser)
                     return done(null, result)
                 } else {
+                    const cart = await cartService.getId(user.cart) || await cartService.save({})
+                    await userService.update(user._id, {
+                        cart: cart._id,
+                        last_connection: `${new Date().toLocaleDateString()} - ${new Date().toLocaleTimeString()}`,
+                    })
                     return done(null, user)
                 }
             } catch (error) {

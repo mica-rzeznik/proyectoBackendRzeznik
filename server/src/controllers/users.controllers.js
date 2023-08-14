@@ -4,7 +4,7 @@ import CartService from '../services/db/carts.services.js'
 import CustomError from "../services/error/CustomError.js"
 import EErrors from "../services/error/errors-enum.js"
 import { createUserErrorInfo } from '../services/error/messages/user-creation-error.message.js'
-import { passwordEmail } from './email.controllers.js'
+import { passwordEmail, deleteUserEmail } from './email.controllers.js'
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
 
@@ -162,6 +162,32 @@ export const userDocuments = async (req, res) => {
         })
         let upload = await userService.uploadDocuments(files, userId)
         res.status(200).send({ status: 'Success', message: 'Documentos agregados', payload: upload })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
+    }
+}
+
+export const deleteUsersController = async (req, res) => {
+    try{
+        const usuariosViejos = await userService.getOldUsers()
+        usuariosViejos.map(async user => {
+            deleteUserEmail(req, res, user)
+            await userService.deleteUser(user._id)
+        })
+        res.status(200).send({ status: 'Success', message: 'Usuarios eliminados' })
+    }catch(error){
+        res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
+    }
+}
+
+export const deleteUserController = async (req, res) => {
+    try{
+        let userId = req.params.uid
+        const user = await userService.findById(userId)
+        console.log(user)
+        deleteUserEmail(req, res, user)
+        await userService.deleteUser(userId)
+        res.status(200).send({ status: 'Success', message: 'Usuario eliminado' })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }

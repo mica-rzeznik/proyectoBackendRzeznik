@@ -2,7 +2,6 @@ import {Router} from 'express'
 import { passportCall, authorization, authToken } from '../utils.js'
 import UserService from '../services/db/users.services.js'
 import UsersDto from '../services/dto/user.dto.js'
-import { premiumController } from '../controllers/users.controllers.js'
 
 const router = Router()
 const userService = new UserService()
@@ -22,35 +21,27 @@ router.get('/changePassword', (req, res)=>{
     })
 })
 
-router.get('/', passportCall('login'),  (req, res)=>{
-    const user = new UsersDto(req.user)
-    res.render('profile',{user: user})
-})
-
-// usuario admin: adminCoder@coder.com
-// contraseña: adminCod3r123
-
-router.get('/private', passportCall('login'), authorization(['admin']),  (req, res)=>{
-    res.send("Esto solo lo ve el admin")
-})
-
 router.get('/error', (req, res )=>{
     res.render("error", {error: error.message})
 })
 
-router.get("/:userId", passportCall('login'), async (req, res) =>{
-    const userId = req.params.userId
+router.get("/", passportCall('login'), authorization(['admin']), async (req, res) =>{
     try {
-        const user = await userService.findById(userId)
-        if (!user) {
-            res.status(202).json({message: "User not found with ID: " + userId})
-        }
-        res.json(user)
+        const usersCompletos = await userService.getAll()
+        const users = usersCompletos.map(user => {
+            return new UsersDto(user)
+        })
+        res.render('profiles',{users: users})
     } catch (error) {
-        req.logger.error("Error consultando el usuario con ID: " + userId)
+        req.logger.error("Error consultando los usuarios")
     }
 })
 
-router.get("/premium/:uid", premiumController)
+router.get('/:userId', passportCall('login'), async (req, res)=>{
+    const userId = req.params.userId
+    const userCompleto = await userService.findById(userId)
+    const user = new UsersDto(userCompleto)
+    res.render('profile',{user: user})
+})
 
 export default router

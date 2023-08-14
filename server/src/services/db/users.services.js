@@ -1,5 +1,7 @@
 import userModel from "./models/users.models.js"
 import logger from '../../config/logger.js'
+import mongoose from "mongoose"
+const ObjectId = mongoose.Types.ObjectId
 
 export default class UserService {
     getAll = async () => {
@@ -46,5 +48,33 @@ export default class UserService {
     uploadDocuments = async (files, userId) => {
         const user = await userModel.findByIdAndUpdate(userId, { documents: files})
         return user
+    }
+    getOldUsers = async () => {
+        const currentDate = new Date()
+        currentDate.setDate(currentDate.getDate() - 1)
+        const formattedCurrentDate = `${currentDate.toLocaleDateString()} - ${currentDate.toLocaleTimeString()}`
+        const oldUsers = await userModel.find({
+            last_connection: { $lt: formattedCurrentDate },
+            role: { $ne: 'admin' }
+        })
+        return oldUsers
+    }
+    deleteUser = async (id) => {
+        if (!ObjectId.isValid(id)) {
+            throw new Error(`ID de usuario inválido: ${id}`)
+        }
+        const user = await userModel.findById(id)
+        if(user.role != 'admin'){
+            try {
+                const result = await userModel.findByIdAndDelete(new ObjectId(id))
+                if (result === null) {
+                    throw new Error(`No se pudo eliminar el usuario con id ${id}`)
+                }
+            } catch (error) {
+                throw new Error(`Error al eliminar el usuario con id ${id}: ${error.message}`)
+            }
+        }else{
+            throw new Error('Usuario no era ni premium ni user')
+        }
     }
 }
