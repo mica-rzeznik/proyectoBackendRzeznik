@@ -16,7 +16,9 @@ export const getDatosController = async (req, res) => {
             cart: carritos
         })
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: error.message
+        })
     }
 }
 export const getIdDatosController = async (req, res) => {
@@ -26,7 +28,9 @@ export const getIdDatosController = async (req, res) => {
             cart: cartId
         })
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: error.message
+        })
     }
 }
 export const postDatosController = async (req, res) => {
@@ -55,7 +59,7 @@ export const postProductDatosController = async (req, res) => {
             throw new Error(`Usuario no autorizado`)
         }
         const newCart = await cartService.saveProduct(cartId, productId)
-        res.status(200).send( { status: "Success", message: "Producto agregado al carrito exitosamente" , data: newCart })/*.redirect('/api/products')*/
+        res.status(200).send( { status: "Success", message: "Producto agregado al carrito exitosamente" , data: newCart })
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }

@@ -4,8 +4,9 @@
     <p>Email: {{user.email}}</p>
     <p>Edad: {{user.age}}</p>
     {{!-- <button class="btn btn-outline-secondary" onclick="cambiarRol('{{user.id}}')">Cambiar rol</button> --}}
-    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Subir archivo</button>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#archivoModal" data-bs-whatever="@mdo">Subir archivo</button>
+    <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#profileModal" data-bs-whatever="@mdo">Subir foto de perfil</button>
+    <div class="modal fade" id="archivoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -13,7 +14,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="row g-3 needs-validation" id="uploadForm" name="{{user.id}}">
+                    <form class="row g-3 needs-validation" id="uploadDocumentsForm" name="{{user.id}}">
                         <div class="mb-3">
                             <label for="identificación">Suba su identificación</label>
                             <input class="form-control" name="identificación" type="file" required>
@@ -25,6 +26,25 @@
                         <div class="mb-3">
                             <label for="cuenta">Cargue su comprobante de estado de cuenta aquí</label>
                             <input class="form-control" name="cuenta" type="file" required>
+                        </div>
+                        <input type="submit" class="btn btn-success">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Seleccione su archivo</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3 needs-validation" id="uploadProfileForm" name="{{user.id}}">
+                        <div class="mb-3">
+                            <label for="profile-pic">Suba su foto de perfil</label>
+                            <input class="form-control" name="profile-pic" type="file" required>
                         </div>
                         <input type="submit" class="btn btn-success">
                     </form>

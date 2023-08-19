@@ -15,7 +15,7 @@ form.addEventListener('submit',e=>{
         if (result.status === 201) {
             result.json();
             alert("Usuario creado con éxito!")
-            window.location.replace('/api/users/login')
+            window.location.replace('/users/login')
         }else {
             return result.json().then((error) => {
                 console.error(error.cause)

@@ -1,9 +1,9 @@
 import Router from 'express'
 const router = Router()
-import { getChatSocketController, getChatsController, postChatsController } from '../controllers/chats.controllers.js'
+import { getChatSocketController, postChatsController } from '../controllers/chats.controllers.js'
 import { passportCall } from '../utils.js'
 
-router.get('/', passportCall('login'), getChatSocketController)
-router.post('/', passportCall('login'), postChatsController)
+router.get('/',passportCall('jwt'), getChatSocketController)
+router.post('/',passportCall('jwt'), postChatsController)
 
 export default router

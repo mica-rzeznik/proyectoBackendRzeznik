@@ -11,9 +11,8 @@ import initializePassport from '../src/config/passport.config.js'
 import productsRoutes from '../src/routes/products.routes.js'
 import cartsRoutes from '../src/routes/carts.routes.js'
 import usersViewsRoutes from '../src/routes/users.views.routes.js'
-import sessionsRoutes from '../src/routes/sessions.routes.js'
-import githubLoginViewRouter from '../src/routes/github-login.views.router.js'
 import jwtRouter from '../src/routes/jwt.routes.js'
+import usersRoutes from '../src/routes/users.routes.js'
 import ticketsRouter from './routes/tickets.router.js'
 import emailRouter from './routes/email.routes.js'
 import mockingRouter from './routes/mocking.router.js'
@@ -88,27 +87,26 @@ app.use(passport.initialize())
 // app.use(passport.session())
 
 app.get('/', (req, res) => {
-    res.redirect('/api/users/login')
+    res.redirect('/users/login')
 })
 app.use(compression())
 app.use('/api/products/', productsRoutes)
 app.use('/api/carts/', cartsRoutes)
-app.use('/api/users', usersViewsRoutes)
-// app.use('/api/sessions', sessionsRoutes)
-app.use('/github', githubLoginViewRouter)
+app.use('/api/users', usersRoutes)
 app.use('/api/jwt', jwtRouter)
 app.use('/api/tickets', ticketsRouter)
 app.use('/api/email', emailRouter)
 app.use('/mockingproducts', mockingRouter)
+app.use('/users', usersViewsRoutes)
 app.use('/chat', chatRouter)
 app.use('/loggerTest', loggerRouter)
 const chatService = new ChatService()
 socketServer.on('connection', async (socket) => {
     logger.debug("Nuevo cliente conectado")
     try {
-        const messages = await chatService.getAll()
-        const reverseMessages = messages.slice().reverse()
-        socket.emit('message', reverseMessages)
+        socket.on('message', data => {
+            socketServer.emit('messageLogs', data)
+        })
     } catch (error) {
         logger.error('Error al obtener los mensajes:', error)
     }
@@ -122,14 +120,3 @@ const mongoInstance = async () => {
     }
 }
 mongoInstance()
-
-// const connectMongoDB = async ()=>{
-//     try {
-//         await mongoose.connect(DB)
-//         console.log("Conectado con éxito a MongoDB usando Moongose.")
-//     } catch (error) {
-//         console.error("No se pudo conectar a la BD usando Moongose: " + error)
-//         process.exit()
-//     }
-// }
-// connectMongoDB()

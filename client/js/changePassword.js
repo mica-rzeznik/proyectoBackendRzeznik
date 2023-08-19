@@ -19,12 +19,12 @@ form.addEventListener('submit',e=>{
             result.json()
             .then(json=>{
                 alert("Contraseña cambiada con éxito")
-                window.location.replace('/api/users/login')
+                window.location.replace('/users/login')
             })
         } else if (result.status === 401){
             result.json().then(json => {
                 alert(json.error)
-                window.location.replace('/api/users/login')
+                window.location.replace('/users/login')
             })
         }else {
             alert("Error al cambiar la contraseña")

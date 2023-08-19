@@ -1,11 +1,12 @@
 import path from "path"
 import __dirname from "../utils.js"
 import ProductService from "../services/db/products.services.js"
-import UsersDto from "../services/dto/user.dto.js"
 import CustomError from "../services/error/CustomError.js"
 import { generateProductErrorInfo } from "../services/error/messages/product-creation-error.message.js"
 import EErrors from "../services/error/errors-enum.js"
 import UserService from "../services/db/users.services.js"
+import config from "../config/config.js"
+import { deleteProductEmail } from "./email.controllers.js"
 
 const productService = new ProductService()
 const userService = new UserService()
@@ -17,8 +18,8 @@ export const getDatosController = async (req, res) => {
         const query = req.query.query
         const sort = req.query.sort
         const result = await productService.getAll(page, limit, query, sort)
-        const prevLink = result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : ''
-        const nextLink = result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : ''
+        const prevLink = result.hasPrevPage ? `http://localhost:${config.port}/api/products?page=${result.prevPage}` : ''
+        const nextLink = result.hasNextPage ? `http://localhost:${config.port}/api/products?page=${result.nextPage}` : ''
         const products = result.docs
         const userId = (await userService.findByUsername(req.user.email))._id
         res.render(path.join(__dirname, 'views', 'products'), {
@@ -37,7 +38,9 @@ export const getDatosController = async (req, res) => {
             userId: userId
         })
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: error.message
+        })
     }
 }
 
@@ -51,7 +54,9 @@ export const getIdDatosController = async (req, res) => {
             userId: userId
         })
     }catch(error){
-        res.status(500).send({ status: "Error", message: error.message })
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: error.message
+        })
     }
 }
 
@@ -106,6 +111,8 @@ export const deleteDatosController = async (req, res) => {
         if (req.user.email != product.owner & req.user.rol != 'admin') {
             throw new Error(`Usuario no autorizado`)
         }
+        const user = await userService.findByUsername(product.owner)
+        deleteProductEmail(req, res, user, product)
         await productService.delete(productId)
         return res.status(200).send({ status: "Success", message: "Producto eliminado." })
     }catch(error){

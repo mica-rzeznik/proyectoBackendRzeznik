@@ -1,10 +1,11 @@
 import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+import path, { dirname } from 'path'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import { faker } from '@faker-js/faker'
 import multer from 'multer'
+import fileSystem from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -94,13 +95,18 @@ export const cookieExtractor = req =>{
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
+        let destinationPath
         if (file.fieldname.startsWith('profile-pic')) {
-            cb(null, `${__dirname}/public/profiles`)
+            destinationPath = path.join(__dirname, 'public', 'profiles')
         } else if (file.fieldname.startsWith('product-pic')) {
-            cb(null, `${__dirname}/public/products`)
+            destinationPath = path.join(__dirname, 'public', 'products')
         } else {
-            cb(null, `${__dirname}/public/documents`)
+            destinationPath = path.join(__dirname, 'public', 'documents')
         }
+        if (!fileSystem.existsSync(destinationPath)) {
+            fileSystem.mkdirSync(destinationPath, { recursive: true });
+        }
+        cb(null, destinationPath)
     },
     filename: function(req,file,cb){
         cb(null,`${Date.now()}-${file.originalname}`)

@@ -7,6 +7,7 @@ import { createUserErrorInfo } from '../services/error/messages/user-creation-er
 import { passwordEmail, deleteUserEmail } from './email.controllers.js'
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
+import UsersDto from '../services/dto/user.dto.js'
 
 const userService = new UserService()
 const cartService = new CartService()
@@ -95,7 +96,7 @@ export const changePasswordEmailController = async (req, res) => {
     try{
         let email = req.params.email
         const token = generateJWTokenEmail(email)
-        const resetPasswordLink = `http://localhost:${config.port}/api/users/changePassword?token=${encodeURIComponent(token)}`
+        const resetPasswordLink = `http://localhost:${config.port}/users/changePassword?token=${encodeURIComponent(token)}`
         passwordEmail(req, res, email, resetPasswordLink)
         res.status(200).send({ message: "Success!" })
     } catch (error) {
@@ -106,7 +107,6 @@ export const changePasswordEmailController = async (req, res) => {
 export const changePasswordController = async (req, res) => {
     try{
         const token = req.query.token
-        console.log(token)
         if (!token) {
             return res.status(401).send({ status: 'error', error: 'Enlace vencido. Envíe el mail de restablecimiento nuevamente.' })
         }
@@ -129,16 +129,6 @@ export const changePasswordController = async (req, res) => {
     }catch(error){
         res.status(500).send({ status: "Error", message: error.message, cause: error.cause })
     }
-}
-
-export const githubcallbackController =  async (req, res) => {
-    // const user = req.user
-    // req.session.user= {
-    //     name : `${user.first_name} ${user.last_name}`,
-    //     email: user.email,
-    //     age: user.age
-    // }
-    res.redirect("/github")
 }
 
 export const premiumController = async (req, res) => {
@@ -167,6 +157,35 @@ export const userDocuments = async (req, res) => {
     }
 }
 
+export const getUsersController = async (req, res) =>{
+    try {
+        const usersCompletos = await userService.getAll()
+        const users = usersCompletos.map(user => {
+            return new UsersDto(user)
+        })
+        res.render('profiles',{users: users})
+    } catch (error) {
+        req.logger.error("Error consultando los usuarios")
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: "Error consultando los usuarios"
+        })
+    }
+}
+
+export const getUserController = async (req, res)=>{
+    try{
+        const userId = req.params.userId
+        const userCompleto = await userService.findById(userId)
+        const user = new UsersDto(userCompleto)
+        res.render('profile',{user: user})
+    }catch(error){
+        req.logger.error("Error consultando al usuario")
+        res.status(500).render(path.join(__dirname, 'views', 'error'), {
+            error: "Error consultando al usuario"
+        })
+    }
+}
+
 export const deleteUsersController = async (req, res) => {
     try{
         const usuariosViejos = await userService.getOldUsers()
@@ -184,7 +203,6 @@ export const deleteUserController = async (req, res) => {
     try{
         let userId = req.params.uid
         const user = await userService.findById(userId)
-        console.log(user)
         deleteUserEmail(req, res, user)
         await userService.deleteUser(userId)
         res.status(200).send({ status: 'Success', message: 'Usuario eliminado' })

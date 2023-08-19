@@ -1,5 +1,6 @@
 import path from "path";
 import __dirname, { generateProducts } from "../utils.js";
+import config from "../config/config.js";
 
 export const getDatosController = async (req, res) => {
     try {
@@ -17,8 +18,8 @@ export const getDatosController = async (req, res) => {
         const prevPage = page - 1
         const hasNextPage = endIndex < products.length
         const nextPage = page + 1
-        const prevLink = hasPrevPage ? `http://localhost:8080/mockingproducts?page=${prevPage}` : ''
-        const nextLink = hasNextPage ? `http://localhost:8080/mockingproducts?page=${nextPage}` : ''
+        const prevLink = hasPrevPage ? `http://localhost:${config.port}/mockingproducts?page=${prevPage}` : ''
+        const nextLink = hasNextPage ? `http://localhost:${config.port}/mockingproducts?page=${nextPage}` : ''
         res.render(path.join(__dirname, 'views', 'products'), {
             products: paginatedProducts,
             page: page,
