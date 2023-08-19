@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node server/src/app.js"
+    "build": "node server/src/app.js",
+    "start": "node server/src/app.js",
+    "dev": "node server/src/app.js"
   },
   "keywords": [],
   "author": "",
