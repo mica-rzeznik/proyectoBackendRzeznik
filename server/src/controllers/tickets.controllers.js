@@ -8,7 +8,7 @@ export const getTickets = async (req, res) => {
     res.send({ message: "Success!", payload: tickets })
 }
 export const getTicketById = async (req, res) => {
-    const ticketsId = [await ticketService.getId(req.params.pid)]
+    const ticketsId = await ticketService.getId(req.params.tid)
     res.send({ message: "Success!", payload: ticketsId })
 }
 export const saveTicket = async (req, res) => {

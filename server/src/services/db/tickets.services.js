@@ -14,7 +14,7 @@ export default class TicketService {
         // const result = await ticketsModel.findOne({ _id: id })
         // return result
         let result = await ticketsModel.findById(id)
-        return result.toObject()
+        return result
     }
     save = async (cartId, user) => {
         let ticket = await ticketsModel.create({})

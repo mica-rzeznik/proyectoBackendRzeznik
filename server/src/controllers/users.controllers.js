@@ -44,7 +44,7 @@ export const loginController = async (req, res)=>{
             // maxAge: 1000000,
             httpOnly: true
         })
-        res.send({message: "Login successful!"})
+        res.send({message: "Login successful!", data: tokenUser})
     } catch (error) {
         req.logger.error(error)
         return res.status(500).send({status:"error",error:"Error interno de la applicacion."})
