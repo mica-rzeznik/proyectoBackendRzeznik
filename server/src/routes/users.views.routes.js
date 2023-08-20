@@ -11,10 +11,7 @@ router.get('/register', (req, res)=>{
 })
 
 router.get('/changePassword', (req, res)=>{
-    const email = req.params.email
-    res.render('changePassword', {
-        email: email
-    })
+    res.render('changePassword')
 })
 
 export default router
