@@ -19,7 +19,6 @@ export default class TicketService {
     save = async (cartId, user) => {
         let ticket = await ticketsModel.create({})
         const cart = await cartModel.findOne({_id: cartId})
-        console.log(cart.products)
         let result = await ticketsModel.findByIdAndUpdate(ticket._id, {
             purchaser: user.id,
             purchaser_name: user.name,
